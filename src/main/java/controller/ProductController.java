@@ -16,24 +16,23 @@ import java.util.List;
 
 @WebServlet("/product")
 public class ProductController extends HttpServlet {
-
     private ProductServices productService;
-
-    public void init()
-    {
+    public void init() {
         productService = new ProductServices();
     }
+
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doGet(req, resp);
     }
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getServletPath();
 
         try {
             switch (action) {
-//                case "/categoryNews":
-//                    listOfCategory(request, response);
-//                    break;
+                case "/edit":
+                    listOfProducts(request, response);
+                    break;
                 default:
                     getAllProducts(request, response);
                     break;
@@ -42,12 +41,18 @@ public class ProductController extends HttpServlet {
             throw new ServletException(ex);
         }
     }
- private void getAllProducts(HttpServletRequest request, HttpServletResponse response)
+    private void getAllProducts(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
-        List<Product> productList = ProductServices.getAllProduct();
+        List<Product> productList = productService.getAllProduct();
         request.setAttribute("productList", productList);
         System.out.println("Product list");
         RequestDispatcher dispatcher = request.getRequestDispatcher("home.jsp");
         dispatcher.forward(request, response);
     }
+    private void listOfProducts(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException
+    {
+
+    }
+
 }

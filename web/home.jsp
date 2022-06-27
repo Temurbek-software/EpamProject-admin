@@ -1,20 +1,20 @@
 <%--
   Created by IntelliJ IDEA.
   User: Temurbek
-  Date: 6/15/2022
-  Time: 1:22 AM
+  Date: 6/24/2022
+  Time: 4:07 PM
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Title</title>
-    <jsp:include page="header/header.jsp"></jsp:include>
+      <title>Dashboard - SB Admin</title>
+    <jsp:include page="header/head.jsp"></jsp:include>
 </head>
 <body class="sb-nav-fixed">
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
     <!-- Navbar Brand-->
-    <a class="navbar-brand ps-3" href="<%=request.getContextPath()%>/">Admin panel</a>
+    <a class="navbar-brand ps-3" href="<%=request.getContextPath()%>/">Online news portal</a>
     <!-- Sidebar Toggle-->
     <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
             class="fas fa-bars"></i></button>
@@ -48,27 +48,28 @@
             <div class="sb-sidenav-menu">
                 <div class="nav">
                     <div class="sb-sidenav-menu-heading">Core</div>
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="index.html">
                         <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                        Users
+                        Dashboard
                     </a>
                     <div class="sb-sidenav-menu-heading">Interface</div>
                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts"
                        aria-expanded="false" aria-controls="collapseLayouts">
                         <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                        Pages
+                        Tables
                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                     </a>
                     <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne"
                          data-bs-parent="#sidenavAccordion">
                         <nav class="sb-sidenav-menu-nested nav">
-                            <a class="nav-link" href="#">Static Navigation</a>
+                            <a class="nav-link" href="<%=request.getContextPath()%>/users">Users</a>
+                            <a class="nav-link" href="layout-sidenav-light.html">Product</a>
                         </nav>
                     </div>
                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages"
                        aria-expanded="false" aria-controls="collapsePages">
                         <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                        Pages
+                        Apps
                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                     </a>
                     <div class="collapse" id="collapsePages" aria-labelledby="headingTwo"
@@ -77,34 +78,20 @@
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
                                data-bs-target="#pagesCollapseAuth" aria-expanded="false"
                                aria-controls="pagesCollapseAuth">
-                                Authentication
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                Chat
+<%--                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>--%>
                             </a>
-                            <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne"
-                                 data-bs-parent="#sidenavAccordionPages">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="#">Login</a>
-                                    <a class="nav-link" href="#">Register</a>
-                                    <a class="nav-link" href="#">Forgot Password</a>
-                                </nav>
-                            </div>
+
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
                                data-bs-target="#pagesCollapseError" aria-expanded="false"
                                aria-controls="pagesCollapseError">
-                                Error
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                Posting news
+<%--                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>--%>
                             </a>
-                            <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne"
-                                 data-bs-parent="#sidenavAccordionPages">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="401.html">401 Page</a>
-                                    <a class="nav-link" href="404.html">404 Page</a>
-                                    <a class="nav-link" href="500.html">500 Page</a>
-                                </nav>
-                            </div>
+
                         </nav>
                     </div>
-                    <div class="sb-sidenav-menu-heading">Addons</div>
+                    <div class="sb-sidenav-menu-heading">Additional</div>
 
                     <a class="nav-link" href="tables.html">
                         <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
@@ -113,23 +100,23 @@
                 </div>
             </div>
             <div class="sb-sidenav-footer">
-                <div class="small">Made by:</div>
-                Epam team
+                <div class="small">Logged in as:</div>
+                User
             </div>
         </nav>
     </div>
     <div id="layoutSidenav_content">
         <main>
-            <div class="container-fluid px-4">
-                <h1 class="mt-4">Users page</h1>
-                <ol class="breadcrumb mb-4">
-                    <li class="breadcrumb-item active">Users</li>
-                </ol>
-                <jsp:include page="entitiesList/UserList.jsp"></jsp:include>
-            </div>
+            <jsp:include page="entityList/UserList.jsp"></jsp:include>
         </main>
         <jsp:include page="footer/footer.jsp"></jsp:include>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+<script src="${pageContext.request.contextPath}/static/js/scripts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+<script src="${pageContext.request.contextPath}/static/js/datatables-simple-demo.js"></script>
 </body>
 </html>

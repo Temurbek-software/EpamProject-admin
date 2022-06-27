@@ -35,8 +35,6 @@ public class DB {
             }
         }
     }
-
-
     public static Date getUtilDate(java.util.Date utilDate) {
         return new Date(utilDate.getTime());
     }

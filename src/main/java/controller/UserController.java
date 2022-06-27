@@ -13,15 +13,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 @WebServlet("/")
 public class UserController extends HttpServlet {
+    private static final long serialVersionUID = 1L;
     private UserServices userServices;
 
-    @Override
-    public void init() throws ServletException {
-        super.init();
+    public void init() {
+        userServices = new UserServices();
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -33,9 +36,18 @@ public class UserController extends HttpServlet {
 
         try {
             switch (action) {
-//                case "/categoryNews":
-//                    listOfCategory(request, response);
+                case "/delete":
+                    deleteUser(request, response);
+                    break;
+                case "/edit":
+                    editUser(request, response);
+                    break;
+//                case "/create":
+//                    updateUser(request, response);
 //                    break;
+                case "/update":
+                    insertUSer(request, response);
+                    break;
                 default:
                     getAllUsers(request, response);
                     break;
@@ -47,10 +59,52 @@ public class UserController extends HttpServlet {
 
     private void getAllUsers(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
-        List<Users> usersList = UserServices.getAllUsers();
+        List<Users> usersList = userServices.getAllUser();
         request.setAttribute("usersList", usersList);
         System.out.println("Product list");
         RequestDispatcher dispatcher = request.getRequestDispatcher("home.jsp");
         dispatcher.forward(request, response);
     }
+
+    private void deleteUser(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        userServices.deleteUser(id);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("");
+        dispatcher.forward(request, response);
+    }
+
+    private void editUser(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        Users currentUser = userServices.getOneUser(id);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("");
+        request.setAttribute("currentUser", currentUser);
+        dispatcher.forward(request, response);
+    }
+
+    private void insertUSer(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException {
+        String username = request.getParameter("username");
+        String fullName = request.getParameter("fullName");
+        String password = request.getParameter("password");
+        String phoneNumber = request.getParameter("phoneNumber");
+        String email = request.getParameter("email");
+        Users users = new Users(username, fullName, password, phoneNumber, email);
+        userServices.saveUser(users);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("");
+        dispatcher.forward(request, response);
+    }
+
+//    private void updateUser(HttpServletRequest request, HttpServletResponse response)
+//            throws SQLException, IOException, ServletException {
+//        long id = Integer.parseInt(request.getParameter("id"));
+//        String username = request.getParameter("username");
+//        String fullName = request.getParameter("fullName");
+//        String password=request.getParameter("password");
+//        String phoneNumber=request.getParameter("phoneNumber");
+//        String email=request.getParameter("email");
+//        Users users= new Users(id,username,fullName,password,phoneNumber,email);
+
+//    }
 }
