@@ -17,7 +17,7 @@ CREATE TABLE public.product
     textData text NOT NULL,
     description character varying(255) NOT NULL,
     sourcelinkTo character varying(255) NOT NULL,
-    photofile bytea[] NOT NULL,
+    photofile bytea NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     category_id integer

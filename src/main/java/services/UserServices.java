@@ -5,7 +5,6 @@ import entity.Product;
 import entity.Users;
 import payload.UserDto;
 
-import javax.xml.registry.infomodel.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -30,6 +29,8 @@ public class UserServices {
     private static final String GET_AUTHENTICATE = "SELECT id, username," +
             " \"fullName\", password, \"phoneNumber\", email, \"createdTime\"\n" +
             "\tFROM public.users where username='?' and password='?'";
+    private static final String GET_COUNT_FOR_USERS="SELECT count(*) as numbers\n" +
+            "\tFROM public.users;";
 
     public boolean validate(UserDto userDto) throws ClassNotFoundException {
         boolean status = false;
@@ -72,7 +73,9 @@ public class UserServices {
         String password = resultSet.getString("password");
         String phoneNumber = resultSet.getString("phoneNumber");
         String email = resultSet.getString("email");
-        users = new Users(id, username, fullName, password, phoneNumber, email);
+        Date created_at = resultSet.getDate("created_at");
+        Date updated_at = resultSet.getDate("updated_at");
+        users = new Users(id, username, fullName, password, phoneNumber, email,created_at,updated_at);
         return users;
     }
 
@@ -106,7 +109,22 @@ public class UserServices {
         }
         return usersList;
     }
-
+    public int getCount()
+    {
+        int number=0;
+        try(PreparedStatement preparedStatement = getstatement(GET_COUNT_FOR_USERS);)
+        {
+         ResultSet resultSet= preparedStatement.executeQuery();
+         while (resultSet.next())
+         {
+              number=resultSet.getInt("numbers");
+         }
+        }
+        catch (SQLException exception) {
+            DB.printSQLException(exception);
+        }
+        return number;
+    }
     public Users getOneUser(long num) {
         Users users = null;
         try (PreparedStatement preparedStatement = getstatement(GET_ONE_USER)) {
@@ -132,8 +150,11 @@ public class UserServices {
 
     public boolean updateUser(long userId, Users users) throws SQLException {
        boolean status=false;
+        System.out.println("Update method started");
         try {
             PreparedStatement statement = getstatement("UPDATE public.users\tSET  username='"+users.getUsername()+"', \"fullName\"='"+users.getFullName()+"', password='"+users.getPassword()+"', \"phoneNumber\"='"+users.getPhoneNumber()+"', email='"+users.getEmail()+"' WHERE id="+userId+";");
+//            System.out.println("UPDATE public.users\\tSET  username='\"+users.getUsername()+\"', \\\"fullName\\\"='\"+users.getFullName()+\"', password='\"+users.getPassword()+\"', \\\"phoneNumber\\\"='\"+users.getPhoneNumber()+\"', email='\"+users.getEmail()+\"' WHERE id=\"+userId+\";");
+            System.out.println("Update");
             int row=statement.executeUpdate();
            if(row==1)
            {
@@ -144,5 +165,6 @@ public class UserServices {
         }
         return status;
     }
+
 
 }

@@ -1,7 +1,9 @@
 package services;
 
 import database.DB;
+import entity.Category;
 import entity.Product;
+import entity.Users;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,10 +12,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Queue;
 
 public class CategoryServices {
     private static final String GET_ONE_PRODUCT = "SELECT id, titles,  description, sourcelinkto, photofile, created_at,\n" +
             "updated_at FROM public.product where category_id=?";
+    private static final String GET_CATEGORY_LIST = "SELECT id, name\n" +
+            "\tFROM public.category;";
+    private static final String GET_ID_BY_NAME = "SELECT  name\n" +
+            "\tFROM public.category where name='?'";
+
     public static List<Product> getProductByCategory(int num) {
         List<Product> categoryList = new ArrayList<>();
         try (Connection connection = DB.getConnection();
@@ -36,5 +44,39 @@ public class CategoryServices {
             DB.printSQLException(exception);
         }
         return categoryList;
+    }
+    public static List<Category> categoryList() {
+        List<Category> categoryList = new ArrayList<>();
+        try (Connection connection = DB.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_CATEGORY_LIST);) {
+            System.out.println(preparedStatement);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                Long id = rs.getLong("id");
+                String name = rs.getString("name");
+                categoryList.add(new Category(id, name));
+            }
+        } catch (SQLException exception) {
+            DB.printSQLException(exception);
+        }
+        return categoryList;
+
+    }
+    public static int getCategoryId(String que)
+    { 
+        int num = 0;
+        try {
+            Connection connection = DB.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT id,  name\n" +
+                    "\tFROM public.category where name='"+que+"'");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                int id=resultSet.getInt("id");
+            num=id;
+            }
+        } catch (SQLException exception) {
+            DB.printSQLException(exception);
+        }
+        return num;
     }
 }

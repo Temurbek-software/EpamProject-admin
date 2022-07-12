@@ -12,11 +12,16 @@ public class Product {
     private byte [] photofile;
     private Date created_at;
     private Date updated_at;
+    private int category_id;
 
     public Product() {
     }
 
-    public Product(Long id, String titles, String description, String sourcelinkTo, byte[] photofile, Date created_at, Date updated_at) {
+    public Product(Long id, String titles,
+                   String description,
+                   String sourcelinkTo,
+                   byte[] photofile,
+                   Date created_at, Date updated_at) {
         this.id = id;
         this.titles = titles;
         this.description = description;
@@ -44,6 +49,25 @@ public class Product {
         this.updated_at = updated_at;
     }
 
+    public Product(String titles, String textData,
+                   String description, String sourcelinkTo,
+                   byte[] photofile, int category_id) {
+        this.titles = titles;
+        this.textData = textData;
+        this.description = description;
+        this.sourcelinkTo = sourcelinkTo;
+        this.photofile = photofile;
+        this.category_id = category_id;
+    }
+
+    public int getCategory_id() {
+        return category_id;
+    }
+
+    public void setCategory_id(int category_id) {
+        this.category_id = category_id;
+    }
+
     public Long getId() {
         return id;
     }
@@ -52,6 +76,8 @@ public class Product {
         this.id = id;
     }
 
+
+
     public String getTitles() {
         return titles;
     }
@@ -59,6 +85,8 @@ public class Product {
     public void setTitles(String titles) {
         this.titles = titles;
     }
+
+
 
     public String getTextData() {
         return textData;

@@ -18,7 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
-@WebServlet("/")
+@WebServlet(urlPatterns = {"/users","/create","/delete","/update"})
 public class UserController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private UserServices userServices;
@@ -30,10 +30,8 @@ public class UserController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doGet(req, resp);
     }
-
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getServletPath();
-
         try {
             switch (action) {
                 case "/delete":
@@ -42,11 +40,11 @@ public class UserController extends HttpServlet {
                 case "/edit":
                     editUser(request, response);
                     break;
-//                case "/create":
-//                    updateUser(request, response);
-//                    break;
-                case "/update":
+                case "/create":
                     insertUSer(request, response);
+                    break;
+                case "/update":
+                    updateUser(request, response);
                     break;
                 default:
                     getAllUsers(request, response);
@@ -62,7 +60,7 @@ public class UserController extends HttpServlet {
         List<Users> usersList = userServices.getAllUser();
         request.setAttribute("usersList", usersList);
         System.out.println("Product list");
-        RequestDispatcher dispatcher = request.getRequestDispatcher("home.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/entityList/UserList.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -70,8 +68,7 @@ public class UserController extends HttpServlet {
             throws SQLException, IOException, ServletException {
         int id = Integer.parseInt(request.getParameter("id"));
         userServices.deleteUser(id);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("");
-        dispatcher.forward(request, response);
+        response.sendRedirect("/users");
     }
 
     private void editUser(HttpServletRequest request, HttpServletResponse response)
@@ -92,19 +89,19 @@ public class UserController extends HttpServlet {
         String email = request.getParameter("email");
         Users users = new Users(username, fullName, password, phoneNumber, email);
         userServices.saveUser(users);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("");
-        dispatcher.forward(request, response);
+       response.sendRedirect("/users");
     }
 
-//    private void updateUser(HttpServletRequest request, HttpServletResponse response)
-//            throws SQLException, IOException, ServletException {
-//        long id = Integer.parseInt(request.getParameter("id"));
-//        String username = request.getParameter("username");
-//        String fullName = request.getParameter("fullName");
-//        String password=request.getParameter("password");
-//        String phoneNumber=request.getParameter("phoneNumber");
-//        String email=request.getParameter("email");
-//        Users users= new Users(id,username,fullName,password,phoneNumber,email);
-
-//    }
+    private void updateUser(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException {
+        long id = Integer.parseInt(request.getParameter("id"));
+        String username = request.getParameter("username");
+        String fullName = request.getParameter("fullName");
+        String password=request.getParameter("password");
+        String phoneNumber=request.getParameter("phoneNumber");
+        String email=request.getParameter("email");
+        Users users= new Users(username,fullName,password,phoneNumber,email);
+        userServices.updateUser(id,users);
+        response.sendRedirect("/users");
+    }
 }

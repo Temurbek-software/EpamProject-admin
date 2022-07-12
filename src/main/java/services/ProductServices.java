@@ -20,12 +20,14 @@ public class ProductServices {
             "\tFROM public.product where \"createdTime\"=(select max(\"createdTime\") from product)";
     private static final String GET_CATEGORY_NAME = "SELECT name\tFROM public.product inner join category on category.id=product.category_id\n" +
             "where product.category_id=?";
-    private static final String SAVE_PRODUCT = "";
+    private static final String SAVE_PRODUCT = "INSERT INTO public.product(\n" +
+            "\t titles, textdata, description, sourcelinkto, photofile, category_id)\n" +
+            "\tVALUES (?, ?, ?, ?, ?, ?);";
     private static final String UPDATE_PRO = "";
     private static final String DELETE_PRO = "";
 
     public Product getProduct(ResultSet resultSet) throws SQLException {
-        Product product = null;
+        Product product;
         Long id = resultSet.getLong("id");
         String titles = resultSet.getString("titles");
         String textData = resultSet.getString("textData");
@@ -66,18 +68,22 @@ public class ProductServices {
         return productList;
     }
 
-    public void saveProduct(Product product) {
+    public int saveProduct(Product product) {
+        int  num=0;
+        System.out.println("SAve product");
         try {
             PreparedStatement preparedStatement = getstatement(SAVE_PRODUCT);
-            preparedStatement.setLong(1, product.getId());
-            preparedStatement.setString(2, product.getTitles());
-            preparedStatement.setString(3, product.getTextData());
+            preparedStatement.setString(1, product.getTitles());
+            preparedStatement.setString(2, product.getTextData());
+            preparedStatement.setString(3, product.getDescription());
             preparedStatement.setString(4, product.getSourcelinkTo());
             preparedStatement.setBytes(5, product.getPhotofile());
-            preparedStatement.executeUpdate();
+            preparedStatement.setInt(6, product.getCategory_id());
+           num =preparedStatement.executeUpdate();
         } catch (SQLException exception) {
             DB.printSQLException(exception);
         }
+        return num;
     }
     public boolean deleteProduct(long productId) throws SQLException {
         boolean status = false;
