@@ -1,11 +1,17 @@
-<%--
+<%@ page import="services.CookieService" %>
+<%@ page import="entity.Publisher" %><%--
   Created by IntelliJ IDEA.
   User: Temurbek
   Date: 6/24/2022
   Time: 7:30 PM
   To change this template use File | Settings | File Templates.
 --%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    CookieService service = new CookieService();
+    Publisher publisher = service.getPublisher(request);
+%>
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
     <!-- Navbar Brand-->
     <a class="navbar-brand ps-3" href="<%=request.getContextPath()%>/">Online news portal</a>
@@ -20,11 +26,16 @@
             <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
         </div>
     </form>
-    <!-- Navbar-->
+
+    <%
+        if (publisher.isActive()) {
+    %>
     <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
-               aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+               aria-expanded="false">
+                <%=publisher.getUsername()%>
+                <i class="fas fa-user fa-fw"></i></a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                 <li><a class="dropdown-item" href="#!">Settings</a></li>
                 <li><a class="dropdown-item" href="#!">Activity Log</a></li>
@@ -35,4 +46,11 @@
             </ul>
         </li>
     </ul>
+    <%
+        }
+    %>
+    <!-- Navbar-->
+<%--    <c:if test="${publisherSession!=null}">--%>
+
+<%--    </c:if>--%>
 </nav>
