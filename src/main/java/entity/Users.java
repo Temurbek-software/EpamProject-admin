@@ -9,6 +9,9 @@ public class Users {
     private String password;
     private String phoneNumber;
     private String email;
+    private boolean isActive;
+    private boolean isDeleted;
+    private boolean isBlocked;
     private Date created_at;
     private Date updated_at;
 
@@ -63,6 +66,30 @@ public class Users {
         this.email = email;
         this.created_at = created_at;
         this.updated_at = updated_at;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public boolean isBlocked() {
+        return isBlocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        isBlocked = blocked;
     }
 
     public Long getId() {
