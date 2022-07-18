@@ -12,9 +12,34 @@ public class Product {
     private byte [] photofile;
     private Date created_at;
     private Date updated_at;
+    private int counterOfView;
     private int category_id;
-
+    private int publisher_id;
+    private boolean isDeleted;
     public Product() {
+    }
+
+    public Product(Long id, String titles, String textData, String description, String sourcelinkTo, byte[] photofile, Date created_at, Date updated_at, int counterOfView, int category_id, int publisher_id, boolean isDeleted) {
+        this.id = id;
+        this.titles = titles;
+        this.textData = textData;
+        this.description = description;
+        this.sourcelinkTo = sourcelinkTo;
+        this.photofile = photofile;
+        this.created_at = created_at;
+        this.updated_at = updated_at;
+        this.counterOfView = counterOfView;
+        this.category_id = category_id;
+        this.publisher_id = publisher_id;
+        this.isDeleted = isDeleted;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 
     public Product(Long id, String titles,
@@ -49,6 +74,18 @@ public class Product {
         this.updated_at = updated_at;
     }
 
+    public Product(Long id, String titles, String textData, String description, String sourcelinkTo, byte[] photofile, Date created_at, Date updated_at, boolean isDeleted) {
+        this.id = id;
+        this.titles = titles;
+        this.textData = textData;
+        this.description = description;
+        this.sourcelinkTo = sourcelinkTo;
+        this.photofile = photofile;
+        this.created_at = created_at;
+        this.updated_at = updated_at;
+        this.isDeleted = isDeleted;
+    }
+
     public Product(String titles, String textData,
                    String description, String sourcelinkTo,
                    byte[] photofile, int category_id) {
@@ -58,6 +95,22 @@ public class Product {
         this.sourcelinkTo = sourcelinkTo;
         this.photofile = photofile;
         this.category_id = category_id;
+    }
+
+    public int getCounterOfView() {
+        return counterOfView;
+    }
+
+    public void setCounterOfView(int counterOfView) {
+        this.counterOfView = counterOfView;
+    }
+
+    public int getPublisher_id() {
+        return publisher_id;
+    }
+
+    public void setPublisher_id(int publisher_id) {
+        this.publisher_id = publisher_id;
     }
 
     public int getCategory_id() {
