@@ -21,6 +21,7 @@
 <jsp:include page="../header/header.jsp"></jsp:include>
 <div id="layoutSidenav">
     <jsp:include page="../header/Navbars.jsp"></jsp:include>
+
     <div id="layoutSidenav_content">
         <main>
             <div class="container px-4">
@@ -28,36 +29,86 @@
                     <div class="col-10 offset-1">
                         <h1 class="mt-4">Add Publisher</h1>
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Adding page </li>
+                            <c:if test="${currentPub != null}">
+                                <li class="breadcrumb-item active">Editig page</li>
+                            </c:if>
+                            <c:if test="${currentPub == null}">
+                                <li class="breadcrumb-item active">Adding page</li>
+                            </c:if>
                         </ol>
-                        <form action="/createNews" method="post" enctype="multipart/form-data">
+<%--                        Erors saving publishers--%>
+                        <c:if test="${msg!=null}">
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                <strong>Hey!</strong><c:out value='${msg}'/>
+                            </div>
+                        </c:if>
+                        <c:if test="${result==false}">
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                <strong>Hey!</strong> We got Arror in saving
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </c:if>
+                        <c:if test="${result==true}">
+                            <div class="alert alert-success" role="alert">
+                                We made it and  saved data.
+                            </div>
+                        </c:if>
+                      <c:if test="${currentPub==null}">
+                        <form action="/addPub" method="post">
+                        </c:if>
+                            <c:if test="${currentPub!=null}">
+                            <form action="/updatePub" method="post">
+                            </c:if>
                             <!-- Name input -->
+                                <c:if test="${currentPub != null}">
+                                    <input type="hidden" name="id" value="<c:out value='${currentPub.id}' />" />
+                                </c:if>
                             <div class="form-outline mb-4">
-                                <input type="text" name="titles" id="form4Example1" class="form-control border"/>
-                                <label class="form-label" for="form4Example1">Post title</label>
+                                <input type="text"
+                                       value="<c:out value='${currentPub.nameOfCompany}' />"
+                                       name="nameOfCompany" id="form4Example1" class="form-control border"/>
+                                <label class="form-label" for="form4Example1">Name for company</label>
                             </div>
                             <div class="form-outline mb-4">
-                                <input type="text" name="description" class="form-control border"/>
-                                <label class="form-label">Post description</label>
+                                <input type="text"
+                                       value="<c:out value='${currentPub.username}' />"
+                                       name="username" id="form4Example2" class="form-control border"/>
+                                <label class="form-label" for="form4Example1">username</label>
                             </div>
-                            <select name="name1"   class="form-select mb-4" aria-label="Default select example">
-                                <option selected>Choose category</option>
-                                <c:forEach var="categ" items="${categoryList}">
-                                    <option value="<c:out value='${categ.id}' />"><c:out value="${categ.name}"/></option>
-                                </c:forEach>
-                            </select>
+                            <div class="form-outline mb-4">
+                                <input type="text"
+                                       value="<c:out value='${currentPub.address}' />"
+                                       name="address" class="form-control border"/>
+                                <label class="form-label">Address</label>
+                            </div>
+                            <div class="form-outline mb-4">
+                                <input type="text"
+                                       value="<c:out value='${currentPub.phoneNumber}' />"
+                                       name="phoneNumber" class="form-control border"/>
+                                <label class="form-label">Phone number</label>
+                            </div>
+                            <div class="form-outline mb-4">
+                                <input type="email"
+                                       value="<c:out value='${currentPub.email}' />"
+                                       name="email" class="form-control border"/>
+                                <label class="form-label">Email</label>
+                            </div>
+                            <div class="form-outline mb-4">
+                                <input type="password"
+                                       value="<c:out value='${currentPub.password}' />"
+                                       name="password" class="form-control border"/>
+                                <label class="form-label">Password</label>
+                            </div>
                             <!-- Message input -->
                             <div class="form-outline mb-4">
-                                <label class="form-label">Message</label>
-                                <textarea name="textData" id="editor" style="min-height: 200px">
+                                <label class="form-label">Description</label>
+                                <textarea name="textData"
+                                          id="editor" style="min-height: 200px">
                                 </textarea>
                             </div>
-                            <div class="form-outline mb-4">
-                                <input type="url" name="sourcelinkTo" class="form-control border"/>
-                                <label class="form-label">Link for post</label>
-                            </div>
-                            <label for="customFile" class="form-label">Upload multiple files</label>
-                            <input class="form-control" name="photofile" type="file" id="customFile" multiple/>
+
                             <!-- Submit button -->
                             <div class="mt-2">
                                 <button type="submit" class="btn btn-primary  mb-4">Send</button>
