@@ -14,4 +14,12 @@
             C:\Users\Temurbek\Documents\Projects\apache-tomcat-9.0.63\webapps\data
         </param-value>
     </context-param>
+<!--    <filter>-->
+<!--        <filter-name>AuthenticationFilter</filter-name>-->
+<!--        <filter-class>authentication.AuthenticationFilter</filter-class>-->
+<!--    </filter>-->
+<!--    <filter-mapping>-->
+<!--        <filter-name>AuthenticationFilter</filter-name>-->
+<!--        <url-pattern>/</url-pattern>-->
+<!--    </filter-mapping>-->
 </web-app>
