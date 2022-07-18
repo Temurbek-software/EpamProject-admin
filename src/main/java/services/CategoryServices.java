@@ -19,9 +19,26 @@ public class CategoryServices {
             "updated_at FROM public.product where category_id=?";
     private static final String GET_CATEGORY_LIST = "SELECT id, name\n" +
             "\tFROM public.category;";
-    private static final String GET_ID_BY_NAME = "SELECT  name\n" +
-            "\tFROM public.category where name='?'";
+    private static final String GET_ID_BY_NAME = "SELECT category.name\n" +
+            "\tFROM public.product inner join category on product.category_id=category.id where product.id=?";
 
+    public static String getCategoryByName(long id)
+    {
+         String categoryName="";
+        try (Connection connection = DB.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_ID_BY_NAME);) {
+            System.out.println(preparedStatement);
+            preparedStatement.setLong(1, id);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                 categoryName = rs.getString("name");
+            }
+        } catch (SQLException exception) {
+            DB.printSQLException(exception);
+        }
+        return categoryName;
+
+    }
     public static List<Product> getProductByCategory(int num) {
         List<Product> categoryList = new ArrayList<>();
         try (Connection connection = DB.getConnection();
