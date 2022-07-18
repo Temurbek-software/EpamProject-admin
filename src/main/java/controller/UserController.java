@@ -1,5 +1,6 @@
 package controller;
 
+import database.DB;
 import entity.Product;
 import entity.Users;
 import services.ProductServices;
@@ -18,7 +19,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
-@WebServlet(urlPatterns = {"/users","/create","/delete","/update"})
+@WebServlet(urlPatterns = {"/addUser", "/editUsers",
+        "/createUsers", "/userList",
+        "/deleteUsers", "/updateUsers"})
 public class UserController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private UserServices userServices;
@@ -30,24 +33,28 @@ public class UserController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doGet(req, resp);
     }
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getServletPath();
         try {
             switch (action) {
-                case "/delete":
+                case "/deleteUsers":
                     deleteUser(request, response);
                     break;
-                case "/edit":
+                case "/editUsers":
                     editUser(request, response);
                     break;
-                case "/create":
+                case "/addUser":
+                    addingPage(request, response);
+                    break;
+                case "/createUsers":
                     insertUSer(request, response);
                     break;
-                case "/update":
+                case "/updateUsers":
                     updateUser(request, response);
                     break;
-                default:
-                    getAllUsers(request, response);
+                case "/userList":
+                    displayUser(request, response);
                     break;
             }
         } catch (SQLException ex) {
@@ -55,12 +62,15 @@ public class UserController extends HttpServlet {
         }
     }
 
-    private void getAllUsers(HttpServletRequest request, HttpServletResponse response)
+    private void displayUser(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
-        List<Users> usersList = userServices.getAllUser();
-        request.setAttribute("usersList", usersList);
-        System.out.println("Product list");
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/entityList/UserList.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/entityList/ManagaUsers.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void addingPage(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("entityList/AddUsers.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -68,15 +78,17 @@ public class UserController extends HttpServlet {
             throws SQLException, IOException, ServletException {
         int id = Integer.parseInt(request.getParameter("id"));
         userServices.deleteUser(id);
-        response.sendRedirect("/users");
+        request.setAttribute("msgDelete","Successfully deleted");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/entityList/ManagaUsers.jsp");
+        dispatcher.forward(request, response);
     }
 
     private void editUser(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         int id = Integer.parseInt(request.getParameter("id"));
         Users currentUser = userServices.getOneUser(id);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("");
         request.setAttribute("currentUser", currentUser);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("entityList/AddUsers.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -89,7 +101,7 @@ public class UserController extends HttpServlet {
         String email = request.getParameter("email");
         Users users = new Users(username, fullName, password, phoneNumber, email);
         userServices.saveUser(users);
-       response.sendRedirect("/users");
+        response.sendRedirect("/users");
     }
 
     private void updateUser(HttpServletRequest request, HttpServletResponse response)
@@ -97,11 +109,24 @@ public class UserController extends HttpServlet {
         long id = Integer.parseInt(request.getParameter("id"));
         String username = request.getParameter("username");
         String fullName = request.getParameter("fullName");
-        String password=request.getParameter("password");
-        String phoneNumber=request.getParameter("phoneNumber");
-        String email=request.getParameter("email");
-        Users users= new Users(username,fullName,password,phoneNumber,email);
-        userServices.updateUser(id,users);
-        response.sendRedirect("/users");
+        String password = request.getParameter("password");
+        String phoneNumber = request.getParameter("phoneNumber");
+        String email = request.getParameter("email");
+        Users users = new Users();
+        users.setUsername(username);
+        users.setFullName(fullName);
+        users.setPassword(password);
+        users.setPhoneNumber(phoneNumber);
+        users.setEmail(email);
+        if (userServices.updateUser(id, users)) {
+            request.setAttribute("msgUpdate", "User has been successfully updated");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/entityList/ManagaUsers.jsp");
+            dispatcher.forward(request, response);
+        } else {
+            request.setAttribute("msgUpdate", "Failed updating");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("entityList/AddUsers.jsp");
+            dispatcher.forward(request, response);
+        }
+
     }
 }
