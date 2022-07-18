@@ -9,6 +9,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -65,7 +68,8 @@ public class UserServices {
         return preparedStatement;
     }
 
-    public Users getUser(ResultSet resultSet) throws SQLException {
+    public Users getUser(ResultSet resultSet) throws SQLException, ParseException {
+        DateFormat dateFormat= new SimpleDateFormat("yyyy-mm-dd hh:mm:ss.a");
         Users users = null;
         Long id = resultSet.getLong("id");
         String username = resultSet.getString("username");
@@ -73,8 +77,8 @@ public class UserServices {
         String password = resultSet.getString("password");
         String phoneNumber = resultSet.getString("phoneNumber");
         String email = resultSet.getString("email");
-        Date created_at = resultSet.getDate("created_at");
-        Date updated_at = resultSet.getDate("updated_at");
+        Date created_at = dateFormat.parse((dateFormat.format(resultSet.getDate("created_at"))));
+        Date updated_at = dateFormat.parse((dateFormat.format(resultSet.getDate("updated_at"))));
         users = new Users(id, username, fullName, password, phoneNumber, email,created_at,updated_at);
         return users;
     }
@@ -104,8 +108,8 @@ public class UserServices {
             while (rs.next()) {
                 usersList.add(getUser(rs));
             }
-        } catch (SQLException exception) {
-            DB.printSQLException(exception);
+        } catch (SQLException | ParseException exception) {
+            DB.printSQLException((SQLException) exception);
         }
         return usersList;
     }
@@ -133,8 +137,8 @@ public class UserServices {
             while (resultSet.next()) {
                 users = getUser(resultSet);
             }
-        } catch (SQLException exception) {
-            DB.printSQLException(exception);
+        } catch (SQLException | ParseException exception) {
+            DB.printSQLException((SQLException) exception);
         }
         return users;
     }
@@ -150,11 +154,15 @@ public class UserServices {
 
     public boolean updateUser(long userId, Users users) throws SQLException {
        boolean status=false;
-        System.out.println("Update method started");
         try {
-            PreparedStatement statement = getstatement("UPDATE public.users\tSET  username='"+users.getUsername()+"', \"fullName\"='"+users.getFullName()+"', password='"+users.getPassword()+"', \"phoneNumber\"='"+users.getPhoneNumber()+"', email='"+users.getEmail()+"' WHERE id="+userId+";");
-//            System.out.println("UPDATE public.users\\tSET  username='\"+users.getUsername()+\"', \\\"fullName\\\"='\"+users.getFullName()+\"', password='\"+users.getPassword()+\"', \\\"phoneNumber\\\"='\"+users.getPhoneNumber()+\"', email='\"+users.getEmail()+\"' WHERE id=\"+userId+\";");
-            System.out.println("Update");
+            PreparedStatement statement = getstatement("UPDATE public.users\n" +
+                    "\tSET  username='"+users.getUsername()+"',\n" +
+                    "\t\"fullName\"='"+users.getFullName()+"', password='"+users.getPassword()+"', \n" +
+                    "\t\"phoneNumber\"='"+users.getPhoneNumber()+"', email='"+users.getEmail()+"',\n" +
+                    "\t\"isActive\"='"+false+"',\n" +
+                    "\t\"isDeleted\"='"+false+"', \n" +
+                    "\t\"isBlocked\"='"+false+"'\n" +
+                    "\tWHERE id="+userId+"");
             int row=statement.executeUpdate();
            if(row==1)
            {
