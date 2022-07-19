@@ -29,8 +29,11 @@ public class PublisherService {
             "address, description, phonenumber,\n" +
             "email, password, created_at, updated_at, username, \"isActive\", \"isBlocked\"\n" +
             "\tFROM public.publisher where id=?";
-    private static final String GET_ALL_PUBLISHER = "SELECT id, \"nameOfCompany\", address, description, phonenumber, email, password, created_at, updated_at, username, \"isActive\"\n" +
-            "\tFROM public.publisher ";
+    private static final String GET_ALL_PUBLISHER = "SELECT id," +
+            " \"nameOfCompany\", address, description, phonenumber," +
+            " email, password, created_at, updated_at, username, " +
+            "\"isActive\", \"isBlocked\"\n" +
+            "\tFROM public.publisher;";
     private static final String SAVE_PUBLISHER = "INSERT INTO public.publisher(\n" +
             "\t\"nameOfCompany\", address, description, phonenumber," +
             " email, password, username, \"isActive\", \"isBlocked\")\n" +
@@ -52,6 +55,18 @@ public class PublisherService {
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         return preparedStatement;
     }
+    public void saveNoisActive(Publisher publisher) {
+        try {
+            PreparedStatement preparedStatement = getstatement(
+                    "UPDATE public.publisher\n" +
+                            "\tSET \"isActive\"='"+false+"'\n" +
+                            "\tWHERE id="+publisher.getId()+";"
+            );
+            int resultSet = preparedStatement.executeUpdate();
+        } catch (SQLException exception) {
+            DB.printSQLException(exception);
+        }
+    }
 
     public Publisher getPulisher(ResultSet resultSet) throws SQLException, ParseException {
         DateFormat dateFormat= new SimpleDateFormat("yyyy-mm-dd hh:mm:ss.a");
@@ -65,10 +80,11 @@ public class PublisherService {
         String password = resultSet.getString("password");
         String description = resultSet.getString("description");
         boolean isActive=resultSet.getBoolean("isActive");
+        boolean isBlocked=resultSet.getBoolean("isBlocked");
         Date created_at = dateFormat.parse((dateFormat.format((resultSet.getTimestamp("created_at")))));
         Date updated_at = dateFormat.parse((dateFormat.format((resultSet.getDate("updated_at")))));
         publisher = new Publisher(id, username, nameOfCompany, address, phoneNumber,
-                email, password, description,isActive,
+                email, password, description,isActive,isBlocked,
                 created_at, updated_at);
         return publisher;
     }
@@ -87,6 +103,7 @@ public class PublisherService {
                 publishersPublisher.setDescription(resultSet.getString("description"));
                 publishersPublisher.setEmail(resultSet.getString("email"));
                 publishersPublisher.setPassword(resultSet.getString("password"));
+                publishersPublisher.setBlocked(resultSet.getBoolean("isBlocked"));
             }
         } catch (SQLException exception) {
             DB.printSQLException(exception);
@@ -123,13 +140,13 @@ public class PublisherService {
         try {
             PreparedStatement preparedStatement = getstatement(
                     "UPDATE public.publisher\n" +
-                            "\tSET \"nameOfCompany\"="+publisher.getNameOfCompany()+"," +
-                            " address="+publisher.getAddress()+", " +
-                            "description="+publisher.getDescription()+"," +
-                            " phonenumber="+publisher.getPhoneNumber()+"," +
-                            " email="+publisher.getEmail()+", " +
-                            "password="+publisher.getPassword()+", " +
-                            "username="+publisher.getUsername()+"\n" +
+                            "\tSET \"nameOfCompany\"='"+publisher.getNameOfCompany()+"'," +
+                            " address='"+publisher.getAddress()+"',\n" +
+                            "\tdescription='"+publisher.getDescription()+"'," +
+                            " phonenumber='"+publisher.getPhoneNumber()+"',\n" +
+                            "\temail='"+publisher.getEmail()+"'," +
+                            " password='"+publisher.getPassword()+"', " +
+                            "username='"+publisher.getUsername()+"'\n" +
                             "\tWHERE id="+publisher.getId()+";"
             );
             resul = preparedStatement.executeUpdate();
@@ -138,7 +155,36 @@ public class PublisherService {
         }
         return resul;
     }
-
+    public int  setFalse(long id)
+    {
+        int res = 0;
+        try {
+            PreparedStatement preparedStatement = getstatement(
+                    "UPDATE public.publisher\n" +
+                            "\tSET \"isBlocked\"='"+false+"'\n" +
+                            "\tWHERE id="+id+";"
+            );
+            res  = preparedStatement.executeUpdate();
+        } catch (SQLException exception) {
+            DB.printSQLException(exception);
+        }
+        return res;
+    }
+    public int setTrue(long idNum)
+    {
+        int resutr=0;
+        try {
+            PreparedStatement preparedStatement = getstatement(
+                    "UPDATE public.publisher\n" +
+                            "\tSET \"isBlocked\"='"+true+"'\n" +
+                            "\tWHERE id="+idNum+";"
+            );
+            resutr = preparedStatement.executeUpdate();
+        } catch (SQLException exception) {
+            DB.printSQLException(exception);
+        }
+        return resutr;
+    }
     private String hashPassword(String plainTextPassword) {
         return BCrypt.hashpw(plainTextPassword, BCrypt.gensalt());
     }
