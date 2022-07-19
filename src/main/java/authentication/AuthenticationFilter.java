@@ -13,7 +13,7 @@ import java.io.IOException;
         , "/deleteNews", "/recover", "/deleteNewsTemporary", "/managePublishers",
         "/displayPublisher",
         "/addPub", "/deletePub", "/editPub", "/updatePub",
-        "/users", "/create", "/delete", "/update", "/registration", "/logout"})
+        "/users", "/create", "/delete", "/update", "/logout"})
 public class AuthenticationFilter implements Filter {
     private ServletContext context;
 
