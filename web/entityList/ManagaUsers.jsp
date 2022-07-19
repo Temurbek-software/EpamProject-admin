@@ -2,7 +2,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="entity.Users" %>
 <%@ page import="entity.Publisher" %>
-<%@ page import="services.PublisherService" %><%--
+<%@ page import="services.PublisherService" %>
+<%@ page import="java.util.stream.Collectors" %><%--
   Created by IntelliJ IDEA.
   User: Temurbek
   Date: 6/24/2022
@@ -28,7 +29,18 @@
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     <strong>Hey! </strong><c:out value='${msgUpdate}'/>
                 </div>
-            </c:if> <c:if test="${msgDelete!=null}">
+            </c:if>
+            <c:if test="${msgRecoveredUser!=null}">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Hey! </strong><c:out value='${msgRecoveredUser}'/>
+            </div>
+        </c:if>
+            <c:if test="${msgDeleteUser!=null}">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Hey! </strong><c:out value='${msgDeleteUser}'/>
+            </div>
+        </c:if>
+            <c:if test="${msgDelete!=null}">
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <strong>Hey! </strong><c:out value='${msgDelete}'/>
             </div>
@@ -44,10 +56,10 @@
 
                         <i class="fas fa-table me-1"></i>
                         Users table
-                        <button style="float: right" type="button"
-                                class="btn btn-success mx-auto">
-                            Add New User
-                        </button>
+<%--                        <button style="float: right" type="button"--%>
+<%--                                class="btn btn-success mx-auto">--%>
+<%--                            Add New User--%>
+<%--                        </button>--%>
                     </div>
 
                     <div class="card-body">
@@ -68,7 +80,10 @@
                             <tbody>
                             <%
                                 UserServices userServices = new UserServices();
-                                for (Users users : userServices.getAllUser()) {
+                                List<Users> usersList=userServices.getAllUser()
+                                        .stream().filter(s->s.isDeleted()==false)
+                                        .collect(Collectors.toList());
+                                for (Users users : usersList) {
                             %>
                             <tr>
                                 <td>
@@ -93,12 +108,39 @@
                                     </p>
                                 </td>
                                 <td>
-                                    <p class="fw-normal mb-1"><%=users.isActive()%>
+                                    <p class="fw-normal mb-1">
+                                        <%
+                                            if (users.isActive()) {
+                                        %>
+                                        <span class=" rounded-pill badge bg-success">active</span>
+                                        <%
+                                        } else {
+                                        %>
+                                        <span class=" rounded-pill badge bg-danger">inActive</span>
+                                        <%
+                                            }
+                                        %>
                                     </p>
                                 </td>
                                 <td>
-                                    <p class="fw-normal mb-1"><%=users.isBlocked()%>
-                                    </p>
+                                    <a href="blockUsers?id=<%=users.getId()%>">
+                                        <%
+                                            if (users.isBlocked()) {
+                                        %>
+                                        <p class="fw-normal mb-1">
+                                            <span class=" rounded-pill badge bg-primary">unblock</span>
+                                        </p>
+                                        <%
+                                        } else {
+                                        %>
+                                        <p class="fw-normal mb-1">
+                                            <span class=" rounded-pill badge bg-info text-dark">block</span>
+                                        </p>
+                                        <%
+                                            }
+                                        %>
+
+                                    </a>
                                 </td>
                                 <td>
                                     <p class="fw-normal mb-1"><%=users.getCreated_at()%>
@@ -116,7 +158,7 @@
                                 </td>&nbsp;
 
                                 <td data-bs-toggle="tooltip" data-bs-placement="top" title="delete">
-                                    <a class="mx-auto" href="deleteUsers?id=<%=users.getId()%>">
+                                    <a class="mx-auto" href="deleteUsersForTime?id=<%=users.getId()%>">
                                         <i style="color:#F93154" class="fas fa-trash"></i>
                                     </a>
                                 </td>
