@@ -46,14 +46,14 @@
                                 <!-- Name input -->
                                 <input type="hidden" name="id" value="<c:out value='${productCurrent.id}' />"/>
                                 <div class="form-outline mb-4">
+                                    <label>Post title</label>
                                     <input type="text" value="<c:out value='${productCurrent.titles}' />" name="titles"
                                            id="form4Example1" class="form-control border"/>
-                                    <label class="form-label" for="form4Example1">Post title</label>
                                 </div>
                                 <div class="form-outline mb-4">
+                                    <label >Post description</label>
                                     <input type="text" value="<c:out value='${productCurrent.description}'/>"
                                            name="description" class="form-control border"/>
-                                    <label class="form-label">Post description</label>
                                 </div>
                                 <select name="name1" class="form-select mb-4" aria-label="Default select example">
                                     <c:if test="${productCurrent!=null}">
@@ -70,16 +70,15 @@
                                 </select>
                                 <!-- Message input -->
                                 <div class="form-outline mb-4">
-                                    <label class="form-label">Message</label>
-                                    <textarea name="editor" value="<c:out value='${productCurrent.textData}'/>"
-                                              id="editor" style="min-height: 200px">
-                                </textarea>
-
+                                    <label>Message</label>
+                                    <textarea name="editor" id="editor" style="min-height: 200px">
+                                      <c:out value='${productCurrent.textData}'/>
+                                    </textarea>
                                 </div>
                                 <div class="form-outline mb-4">
+                                    <label >Link for post</label>
                                     <input type="url" value="<c:out value='${productCurrent.sourcelinkTo}'/>"
                                            name="sourcelinkTo" class="form-control border"/>
-                                    <label class="form-label">Link for post</label>
                                 </div>
                                 <label for="customFile" class="form-label">Upload multiple files</label>
                                 <input class="form-control" value="<c:out value='${productCurrent.photofile}'/>"
@@ -109,17 +108,7 @@
         .catch(error => {
             console.error(error);
         });
-</script>
-<c:if test="${productCurrent!=null}">
-    <script>
-        var editor = CKEDITOR.instances['editor'];
-        editor.setData(<c:out value='${productCurrent.textData}'/>);
-    </script>
-
-</c:if>
-<script>
-    var editor = CKEDITOR.instances['editor'];
-    editor.setData("")
+    ClassicEditor.setData('<c:out value='${productCurrent.textData}'/>')
 </script>
 </body>
 </html>
