@@ -12,10 +12,46 @@ public class Publisher {
     private String email;
     private String password;
     private String description;
-    private boolean isActive=false;
+    private boolean isActive;
     private boolean isBlocked;
     private Date created_At;
     private Date updated_At;
+
+    public Publisher(long id, String username, String nameOfCompany, String address, String phoneNumber,
+                     String email, String password, String description, boolean isBlocked) {
+        this.id = id;
+        this.username = username;
+        this.nameOfCompany = nameOfCompany;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.password = password;
+        this.description = description;
+        this.isBlocked = isBlocked;
+    }
+
+    public Publisher(long id, String username,
+                     String nameOfCompany, String address,
+                     String phoneNumber, String email,
+                     String password,
+                     String description,
+                     boolean isActive,
+                     boolean isBlocked, Date created_At,
+                     Date updated_At)
+    {
+        this.id = id;
+        this.username = username;
+        this.nameOfCompany = nameOfCompany;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.password = password;
+        this.description = description;
+        this.isActive = isActive;
+        this.isBlocked = isBlocked;
+        this.created_At = created_At;
+        this.updated_At = updated_At;
+    }
 
     public Publisher(long id, String username, String nameOfCompany, String address, String phoneNumber, String email, String password, String description, boolean isActive, Date created_At, Date updated_At) {
         this.id = id;
