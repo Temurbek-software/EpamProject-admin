@@ -86,7 +86,7 @@
                            aria-controls="pagesCollapseAuth">
                            Add Publishers
                         </a>
-                        <a  class="nav-link collapsed" href="managePublishers"
+                        <a  class="nav-link collapsed" href="/managePublishers"
                            data-bs-target="#pagesCollapseError"
                            aria-controls="pagesCollapseError">
                             Manage publisher
@@ -102,8 +102,8 @@
                 <div class="collapse" id="collapseLayouts1" aria-labelledby="headingOne"
                      data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="/users">Contact message</a>
-                        <a class="nav-link" href="layout-sidenav-light.html">Complaining message</a>
+                        <a class="nav-link" href="/contactMessage">Contact message</a>
+                        <a class="nav-link" href="/complainMessage">Complaining message</a>
                     </nav>
                 </div>
 <%--                For users--%>
@@ -118,7 +118,7 @@
                     <nav class="sb-sidenav-menu-nested nav">
                         <a class="nav-link" href="/addUser">Add users</a>
                         <a class="nav-link" href="/userList">Manage users</a>
-                        <a class="nav-link" href="">Deleted users</a>
+                        <a class="nav-link" href="/deletedUsersList">Deleted users</a>
                     </nav>
                 </div>
 <%--                Addional page--%>
