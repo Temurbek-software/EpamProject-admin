@@ -18,7 +18,7 @@ import java.util.List;
 
 @WebServlet(urlPatterns = {"/managePublishers",
         "/displayPublisher",
-        "/addPub","/deletePub","/editPub","/updatePub"})
+        "/addPub","/deletePub","/editPub","/updatePub","/blockPublisher"})
 public class PublisherController extends HttpServlet {
     private PublisherService publisherService;
 
@@ -52,6 +52,9 @@ public class PublisherController extends HttpServlet {
             case "/deletePub":
                 deletePublisher(request, response);
                 break;
+            case "/blockPublisher":
+                blocking(request, response);
+                break;
         }
     }
     private void editPublisher(HttpServletRequest request, HttpServletResponse response) throws ServletException,
@@ -61,6 +64,22 @@ public class PublisherController extends HttpServlet {
         Publisher publisher=publisherService.getPublisherById(id);
         request.setAttribute("currentPub",publisher);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/displayPublisher");
+        dispatcher.forward(request, response);
+    }
+
+    private void blocking(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+            IOException {
+        long id = Integer.parseInt(request.getParameter("id"));
+        Publisher publisher = publisherService.getPublisherById(id);
+       if (publisher.isBlocked())
+       {
+           publisherService.setFalse(publisher.getId());
+       }
+       else
+       {
+           publisherService.setTrue(publisher.getId());
+       }
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/managePublishers");
         dispatcher.forward(request, response);
     }
     private void updatePublisher(HttpServletRequest request, HttpServletResponse response) throws ServletException,
