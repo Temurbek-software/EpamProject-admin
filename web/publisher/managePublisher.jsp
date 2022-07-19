@@ -25,21 +25,21 @@
         <main>
             <c:if test="${msgPublisher!=null}">
                 <div class="alert alert-primary alert-dismissible fade show" role="alert">
-                    <strong>Hey! </strong><c:out value='${msg}'/>
+                    <strong>Hey! </strong><c:out value='${msgPublisher}'/>
                 </div>
             </c:if>
             <c:if test="${msgUpdatePublisher!=null}">
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong>Hey! </strong><c:out value='${msg}'/>
+                    <strong>Hey! </strong><c:out value='${msgUpdatePublisher}'/>
                 </div>
             </c:if>
             <c:if test="${msgPublisher1!=null}">
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <strong>Hey! </strong><c:out value='${msgPublisher1}'/>
-            </div>
-        </c:if>
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong>Hey! </strong><c:out value='${msgPublisher1}'/>
+                </div>
+            </c:if>
             <div class="container-fluid px-4">
-                <h1 class="mt-4">Dashboard</h1>
+                <h1 class="mt-4">Publisher list</h1>
                 <ol class="breadcrumb mb-4">
                     <li class="breadcrumb-item active">Dashboard</li>
                 </ol>
@@ -47,11 +47,11 @@
                     <div class="card-header">
 
                         <i class="fas fa-table me-1"></i>
-                        DataTable Example
-                        <button style="float: right" type="button"
-                                class="btn btn-success mx-auto">
-                            Add New User
-                        </button>
+                        Publisher table
+                        <%--                        <button style="float: right" type="button"--%>
+                        <%--                                class="btn btn-success mx-auto">--%>
+                        <%--                            Add New User--%>
+                        <%--                        </button>--%>
                     </div>
 
                     <div class="card-body">
@@ -122,9 +122,24 @@
                                     </p>
                                 </td>
                                 <td>
-                                    <p class="fw-normal mb-1">
-                                        isBlocked
-                                    </p>
+                                    <a href="blockPublisher?id=<%=publisher.getId()%>">
+                                        <%
+                                            if (publisher.isBlocked()) {
+                                        %>
+                                        <p class="fw-normal mb-1">
+                                            <span class=" rounded-pill badge bg-primary">unblock</span>
+                                        </p>
+                                        <%
+                                        } else {
+                                        %>
+                                        <p class="fw-normal mb-1">
+                                            <span class=" rounded-pill badge bg-info text-dark">block</span>
+                                        </p>
+                                        <%
+                                            }
+                                        %>
+
+                                    </a>
                                 </td>
                                 <td data-bs-toggle="tooltip" data-bs-placement="top" title="edit">
                                     <a class="mx-auto" href="editPub?id=<%=publisher.getId()%>">
@@ -138,28 +153,6 @@
                                         <i style="color:#F93154" class="fas fa-trash"></i>
                                     </a>
                                 </td>
-                                <%--                                <td>--%>
-                                <%--                                    <%=rs.getBoolean("isDeleted")%>--%>
-                                <%--                                    <span class="badge bg-primary">Primary</span>--%>
-                                <%--                                    <span class=" rounded-pill badge bg-danger">Danger</span></td>--%>
-                                <%--                                <td>--%>
-                                <%--                                    <button type="button" class="btn btn-link btn-sm btn-rounded">--%>
-                                <%--                                        Edit--%>
-                                <%--                                    </button>--%>
-                                <%--                                </td>--%>
-                                <%--                                <td data-bs-toggle="tooltip" data-bs-placement="top" title="edit">--%>
-                                <%--                                    <a class="mx-auto" href="editNewsForm?id=<%=rs.getLong("id")%>">--%>
-                                <%--                                        <i style="color:#39C0ED" class="fas fa-highlighter">--%>
-                                <%--                                        </i>--%>
-                                <%--                                    </a>--%>
-                                <%--                                </td>&nbsp;--%>
-
-                                <%--                                <td data-bs-toggle="tooltip" data-bs-placement="top" title="delete">--%>
-                                <%--                                    <a class="mx-auto" href="delete?id=<%=rs.getLong("id")%>">--%>
-                                <%--                                        <i style="color:#F93154" class="fas fa-trash"></i>--%>
-                                <%--                                    </a>--%>
-                                <%--                                </td>--%>
-                                <%--                            </tr>--%>
                                     <%
                                     }
                             %>
