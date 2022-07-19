@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,8 +18,6 @@
 
     <!--Fontawesome CDN-->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-
-
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 
 </head>
@@ -133,7 +131,13 @@
 %>
 <body>
 <div class="container">
+
     <div class="d-flex justify-content-center h-100">
+        <c:if test="${msg!=null}">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Hey!  </strong><c:out value='${msg}'/>
+            </div>
+        </c:if>
         <div class="card">
             <div class="card-header">
                 <h3>Sign In</h3>
