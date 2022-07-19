@@ -5,6 +5,7 @@
   Time: 12:20 PM
   To change this template use File | Settings | File Templates.
 --%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -24,12 +25,12 @@
         font-family: 'Poppins', sans-serif;
     }
 
-    body{
+    body {
         background: #00E5FF;
         min-height: 100vh;
     }
 
-    .wrapper{
+    .wrapper {
         max-width: 850px;
         background-color: #fff;
         border-radius: 10px;
@@ -40,7 +41,7 @@
         overflow: hidden;
     }
 
-    .wrapper .form-left{
+    .wrapper .form-left {
         background: #3786bd;
         border-top-left-radius: 10px;
         border-bottom-left-radius: 10px;
@@ -50,7 +51,7 @@
         color: #fff;
     }
 
-    .wrapper h2{
+    .wrapper h2 {
         font-weight: 700;
         font-size: 25px;
         padding: 5px 0 0;
@@ -58,22 +59,22 @@
         pointer-events: none;
     }
 
-    .wrapper .form-left p{
+    .wrapper .form-left p {
         font-size: 0.9rem;
         font-weight: 300;
         line-height: 1.5;
         pointer-events: none;
     }
 
-    .wrapper .form-left .text{
+    .wrapper .form-left .text {
         margin: 20px 0 25px;
     }
 
-    .wrapper .form-left p span{
+    .wrapper .form-left p span {
         font-weight: 700;
     }
 
-    .wrapper .form-left input{
+    .wrapper .form-left input {
         padding: 15px;
         background: #fff;
         border-top-left-radius: 5px;
@@ -89,21 +90,21 @@
         outline: none;
     }
 
-    .wrapper .form-left input:hover{
+    .wrapper .form-left input:hover {
         background-color: #f2f2f2;
     }
 
-    .wrapper .form-right{
+    .wrapper .form-right {
         padding: 20px 40px;
         position: relative;
         width: 100%;
     }
 
-    .wrapper .form-right h2{
+    .wrapper .form-right h2 {
         color: #3786bd;
     }
 
-    .wrapper .form-right label{
+    .wrapper .form-right label {
         font-weight: 600;
         font-size: 15px;
         color: #666;
@@ -111,7 +112,7 @@
         margin-bottom: 8px;
     }
 
-    .wrapper .form-right .input-field{
+    .wrapper .form-right .input-field {
         width: 100%;
         padding: 10px 15px;
         border: 1px solid #e5e5e5;
@@ -121,7 +122,7 @@
         color: #333;
     }
 
-    .wrapper .form-right .input-field:focus{
+    .wrapper .form-right .input-field:focus {
         border: 1px solid #31a031;
     }
 
@@ -156,11 +157,11 @@
         border-radius: 2px
     }
 
-    .wrapper .option:hover input~.checkmark {
+    .wrapper .option:hover input ~ .checkmark {
         background-color: #f1f1f1
     }
 
-    .wrapper .option input:checked~.checkmark {
+    .wrapper .option input:checked ~ .checkmark {
         border: 2px solid #e5e5e5;
         background-color: #fff;
         transition: 300ms ease-in-out all
@@ -174,7 +175,7 @@
         font-size: 1rem;
     }
 
-    .wrapper .option input:checked~.checkmark:after {
+    .wrapper .option input:checked ~ .checkmark:after {
         display: block
     }
 
@@ -185,7 +186,7 @@
         height: 10px
     }
 
-    .wrapper .register{
+    .wrapper .register {
         padding: 12px;
         background: #3786bd;
         border-top-left-radius: 5px;
@@ -199,28 +200,28 @@
         font-size: 15px;
     }
 
-    .wrapper .register:hover{
+    .wrapper .register:hover {
         background-color: #3785bde0;
     }
 
-    .wrapper a{
+    .wrapper a {
         text-decoration: none;
     }
 
     @media (max-width: 860.5px) {
-        .wrapper{
+        .wrapper {
             margin: 50px 5px;
         }
     }
 
 
-    @media (max-width: 767.5px){
-        .wrapper{
+    @media (max-width: 767.5px) {
+        .wrapper {
             flex-direction: column;
             margin: 30px 20px;
         }
 
-        .wrapper .form-left{
+        .wrapper .form-left {
             border-bottom-left-radius: 0px;
         }
 
@@ -229,65 +230,84 @@
 
     @media (max-width: 575px) {
 
-        .wrapper{
+        .wrapper {
             margin: 30px 15px;
         }
 
-        .wrapper .form-left{
+        .wrapper .form-left {
             padding: 25px;
         }
-        .wrapper .form-right{
+
+        .wrapper .form-right {
             padding: 25px;
         }
     }
 </style>
 <body>
 <div class="wrapper">
+    <c:if test="${msgDelete!=null}">
+        <div class="alert alert-primary alert-dismissible fade show" role="alert">
+            <strong>Hey! </strong><c:out value='${msgDelete}'/>
+        </div>
+    </c:if>
     <div class="form-left">
         <h2 class="text-uppercase">information</h2>
         <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Et molestie ac feugiat sed. Diam volutpat commodo.
+            Nothing keeps the world on its toes quite as news does.
+            Good news, bad news, sports news, current news, breaking news—however
+            you read it, the news is the ultimate source of information in the technology age..
         </p>
         <p class="text">
-            <span>Sub Head:</span>
-            Vitae auctor eu augudsf ut. Malesuada nunc vel risus commodo viverra. Praesent elementum facilisis leo vel.
-        </p>
-        <div class="form-field">
-            <input type="submit" class="account" value="Have an Account?">
-        </div>
+            <span>Main point:</span>
+            With over 600 million existing news
+            blogs online, the competition is more than fierce.</p>
+
     </div>
-    <form class="form-right">
-        <h2 class="text-uppercase">Registration form</h2>
+    <form action="" method="post" class="form-right">
+        <h2 class="text-uppercase">Registration!</h2>
+        <input type="hidden" name="description" value=""/>
         <div class="row">
-            <div class="col-sm-6 mb-3">
-                <label>First Name</label>
-                <input type="text" name="first_name" id="first_name" class="input-field">
+            <div class="col-sm-12 mb-3">
+                <label>Company name</label>
+                <input type="text" name="nameOfCompany" class="input-field">
             </div>
-            <div class="col-sm-6 mb-3">
-                <label>Last Name</label>
-                <input type="text" name="last_name" id="last_name" class="input-field">
+        </div>
+        <div class="row">
+            <div class="col-sm-12 mb-3">
+                <label>Address</label>
+                <input type="text" name="address" class="input-field">
             </div>
         </div>
         <div class="mb-3">
-            <label>Your Email</label>
+            <label>Enter Email</label>
             <input type="email" class="input-field" name="email" required>
         </div>
         <div class="row">
             <div class="col-sm-6 mb-3">
-                <label>Password</label>
-                <input type="password" name="pwd" id="pwd" class="input-field">
+                <label>Phone number</label>
+                <input type="text" name="phoneNumber" class="input-field">
             </div>
             <div class="col-sm-6 mb-3">
-                <label>Current Password</label>
-                <input type="password" name="cpwd" id="cpwd" class="input-field">
+                <label>Username</label>
+                <input type="text" name="username" class="input-field">
             </div>
         </div>
-        <div class="mb-3">
-            <label class="option">I agree to the <a href="#">Terms and Conditions</a>
-                <input type="checkbox" checked>
-                <span class="checkmark"></span>
-            </label>
+        <div class="row">
+            <div class="col-sm-6 mb-3">
+                <label>Password</label>
+                <input type="password" name="password" id="pwd" class="input-field">
+            </div>
+            <%--            <div class="col-sm-6 mb-3">--%>
+            <%--                <label>Current Password</label>--%>
+            <%--                <input type="password" name="cpwd" id="cpwd" class="input-field">--%>
+            <%--            </div>--%>
         </div>
+        <%--        <div class="mb-3">--%>
+        <%--            <label class="option">I agree to the <a href="#">Terms and Conditions</a>--%>
+        <%--                <input type="checkbox"  checked>--%>
+        <%--                <span class="checkmark"></span>--%>
+        <%--            </label>--%>
+        <%--        </div>--%>
         <div class="form-field">
             <input type="submit" value="Register" class="register" name="register">
         </div>
