@@ -21,7 +21,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
 <head>
-    <title>Dashboard - SB Admin</title>
+    <title>Post list</title>
     <jsp:include page="../header/head.jsp"></jsp:include>
 </head>
 <body class="sb-nav-fixed">
@@ -30,9 +30,9 @@
     <jsp:include page="../header/Navbars.jsp"></jsp:include>
     <div id="layoutSidenav_content">
         <main>
-            <c:if test="${msgDelete!=null}">
+            <c:if test="${msg!=null}">
                 <div class="alert alert-primary alert-dismissible fade show" role="alert">
-                    <strong>Hey! </strong><c:out value='${msgDelete}'/>
+                    <strong>Hey! </strong><c:out value='${msg}'/>
                 </div>
             </c:if>
             <div class="container-fluid px-4">
