@@ -19,9 +19,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
-@WebServlet(urlPatterns = {"/addUser", "/editUsers",
+@WebServlet(urlPatterns = {"/addUser",
+        "/editUsers",
         "/createUsers", "/userList",
-        "/deleteUsers", "/updateUsers"})
+        "/deleteUsers", "/updateUsers",
+        "/deletedUsersList", "/recoverUsers",
+        "/deleteUsersForTime", "/blockUsers","/blockUsersInDeleted"})
 public class UserController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private UserServices userServices;
@@ -41,6 +44,15 @@ public class UserController extends HttpServlet {
                 case "/deleteUsers":
                     deleteUser(request, response);
                     break;
+                case "/recoverUsers":
+                    recoverUser(request, response);
+                    break;
+                case "/deleteUsersForTime":
+                    deletedUserTime(request, response);
+                    break;
+                case "/deletedUsersList":
+                    deletedList(request, response);
+                    break;
                 case "/editUsers":
                     editUser(request, response);
                     break;
@@ -56,6 +68,12 @@ public class UserController extends HttpServlet {
                 case "/userList":
                     displayUser(request, response);
                     break;
+                case "/blockUsers":
+                    blockUsers(request, response);
+                    break;
+                case "/blockUsersInDeleted":
+                    blockUsersDeleted(request, response);
+                    break;
             }
         } catch (SQLException ex) {
             throw new ServletException(ex);
@@ -65,6 +83,48 @@ public class UserController extends HttpServlet {
     private void displayUser(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         RequestDispatcher dispatcher = request.getRequestDispatcher("/entityList/ManagaUsers.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void recoverUser(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        if (userServices.recoverTemporaryPUsers(id)) {
+            request.setAttribute("msgRecoveredUser", "User recovered successfully");
+        }
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/entityList/ManagaUsers.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void blockUsers(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException {
+
+        int id = Integer.parseInt(request.getParameter("id"));
+        Users users = userServices.getOneUser(id);
+        if (users.isBlocked()) {
+            userServices.setFalse(users.getId());
+        } else {
+            userServices.setTrue(users.getId());
+        }
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/entityList/ManagaUsers.jsp");
+        dispatcher.forward(request, response);
+    }  private void blockUsersDeleted(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException {
+
+        int id = Integer.parseInt(request.getParameter("id"));
+        Users users = userServices.getOneUser(id);
+        if (users.isBlocked()) {
+            userServices.setFalse(users.getId());
+        } else {
+            userServices.setTrue(users.getId());
+        }
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/entityList/DeletedUsers.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void deletedList(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/entityList/DeletedUsers.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -78,7 +138,17 @@ public class UserController extends HttpServlet {
             throws SQLException, IOException, ServletException {
         int id = Integer.parseInt(request.getParameter("id"));
         userServices.deleteUser(id);
-        request.setAttribute("msgDelete","Successfully deleted");
+        request.setAttribute("msgDeleteComplete", "Successfully deleted");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/entityList/DeletedUsers.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void deletedUserTime(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        if (userServices.deleteTemporaryPUsers(id)) {
+            request.setAttribute("msgDeleteUser", "User deleted successfully");
+        }
         RequestDispatcher dispatcher = request.getRequestDispatcher("/entityList/ManagaUsers.jsp");
         dispatcher.forward(request, response);
     }
