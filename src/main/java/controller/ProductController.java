@@ -74,9 +74,6 @@ public class ProductController extends HttpServlet {
                     recoverPost(request, response);
                     break;
 
-                case "/personalMsg":
-                    displayComplain(request, response);
-                    break;
                 default:
                     getStatistic(request, response);
                     break;
@@ -137,11 +134,6 @@ public class ProductController extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    private void displayComplain(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-            IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("publisher/PublisherComplaining.jsp");
-        dispatcher.forward(request, response);
-    }
 
     public void getStatistic(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int numberOfRegisteredUser = userServices.getCount();
