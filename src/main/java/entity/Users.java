@@ -18,6 +18,37 @@ public class Users {
     public Users() {
     }
 
+    public Users(Long id, String username,
+                 String fullName,
+                 String password, String phoneNumber,
+                 String email, boolean isActive,
+                 boolean isDeleted, boolean isBlocked,
+                 Date created_at, Date updated_at) {
+        this.id = id;
+        this.username = username;
+        this.fullName = fullName;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.isActive = isActive;
+        this.isDeleted = isDeleted;
+        this.isBlocked = isBlocked;
+        this.created_at = created_at;
+        this.updated_at = updated_at;
+    }
+
+    public Users(Long id, String username, String fullName, String password, String phoneNumber, String email, boolean isDeleted, Date created_at, Date updated_at) {
+        this.id = id;
+        this.username = username;
+        this.fullName = fullName;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.isDeleted = isDeleted;
+        this.created_at = created_at;
+        this.updated_at = updated_at;
+    }
+
     public Users(Long id, String username, String fullName, String password, String phoneNumber, String email) {
         this.id = id;
         this.username = username;
