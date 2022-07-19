@@ -6,6 +6,7 @@ import entity.Users;
 import payload.ProductDetails;
 import payload.PublisherDto;
 import payload.UserDto;
+import services.CookieService;
 import services.PublisherService;
 import services.UserServices;
 
@@ -47,6 +48,9 @@ public class LoginController extends HttpServlet {
                 case "/registration":
                     registration(request, response);
                     break;
+                case "/regis":
+                    getRegister(request, response);
+                    break;
             }
         } catch (SQLException exception) {
           throw new ServletException(exception);
@@ -57,6 +61,60 @@ public class LoginController extends HttpServlet {
             throws SQLException, IOException, ServletException {
         RequestDispatcher dispatcher = request.getRequestDispatcher("login/login.jsp");
         dispatcher.forward(request, response);
+    }
+
+    private void getRegister(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException {
+        String nameOfCompany = request.getParameter("nameOfCompany");
+        String username = request.getParameter("username");
+        String address = request.getParameter("address");
+        String phoneNumber = request.getParameter("phoneNumber");
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        String description = request.getParameter("description");
+        Publisher publisher = new Publisher();
+        publisher.setNameOfCompany(nameOfCompany);
+        publisher.setUsername(username);
+        publisher.setAddress(address);
+        publisher.setPhoneNumber(phoneNumber);
+        publisher.setEmail(email);
+        publisher.setPassword(password);
+        publisher.setDescription(description);
+        try {
+            if (publisherService.isPublisherExist(publisher) != "SUCCESS") {
+                String nm = publisherService.isPublisherExist(publisher);
+                if (nm.equals("NAME_NOT_VALID")) {
+                    request.setAttribute("msg", "Name has already taken");
+                }
+                if (nm.equals("PHONE_NUMBER_NOT_VALID")) {
+                    request.setAttribute("msg", "Phone has already taken");
+                }
+                if (nm.equals("EMAIL_NOT_VALID")) {
+                    request.setAttribute("msg", "Email has already taken");
+                }
+                if (nm.equals("USERNAME_NOT_VALID")) {
+                    request.setAttribute("msg", "USername has already taken");
+                }
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/registration");
+                dispatcher.forward(request, response);
+            } else {
+                int result = publisherService.savePublisher(publisher);
+                if (result == 1) {
+
+                    request.setAttribute("result", true);
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("/");
+                    dispatcher.forward(request, response);
+                } else {
+                    request.setAttribute("result", false);
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("/");
+                    dispatcher.forward(request, response);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
     private void registration(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
@@ -69,11 +127,9 @@ public class LoginController extends HttpServlet {
         String username = request.getParameter("username").trim();
         String password = request.getParameter("password").trim();
         String remember = request.getParameter("remember");
-        System.out.println("Getting");
         PublisherDto publisher = new PublisherDto();
         publisher.setUsername(username);
         publisher.setPassword(password);
-        System.out.println("entering valid");
         if (publisherService.validate(publisher)) {
             Publisher publisher1 = publisherService.getPublisher(publisher);
             publisherService.saveisActive(publisher1);
@@ -99,6 +155,9 @@ public class LoginController extends HttpServlet {
     }
     private void stopAuthenticate(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
+        CookieService cookieService= new CookieService();
+        Publisher publisher=cookieService.getPublisher(request);
+        publisherService.saveNoisActive(publisher);
         Cookie cookieUser = new Cookie("Username", null);
         Cookie cookiePas = new Cookie("Password", null);
         Cookie cookieRem = new Cookie("RememberMe", null);
@@ -113,7 +172,6 @@ public class LoginController extends HttpServlet {
         request.setAttribute("msg", "You have successfully logged out.");
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("loginPage");
         requestDispatcher.forward(request, response);
-
     }
 
 
