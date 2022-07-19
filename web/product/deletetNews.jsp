@@ -17,7 +17,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
 <head>
-    <title>Deleted news</title>
+    <title>Deleted news page</title>
     <jsp:include page="../header/head.jsp"></jsp:include>
 </head>
 <body class="sb-nav-fixed">
@@ -54,10 +54,10 @@
 
                         <i class="fas fa-table me-1"></i>
                         DataTable Example
-                        <button style="float: right" type="button"
-                                class="btn btn-success mx-auto">
-                            Add New User
-                        </button>
+<%--                        <button style="float: right" type="button"--%>
+<%--                                class="btn btn-success mx-auto">--%>
+<%--                            Add New User--%>
+<%--                        </button>--%>
                     </div>
 
                     <div class="card-body">
