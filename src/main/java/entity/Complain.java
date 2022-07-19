@@ -13,6 +13,15 @@ public class Complain {
     public Complain() {
     }
 
+    public Complain(long id, String message, int user_id, int publisher_id, Date created_at, Date updated_at) {
+        this.id = id;
+        this.message = message;
+        this.user_id = user_id;
+        this.publisher_id = publisher_id;
+        this.created_at = created_at;
+        this.updated_at = updated_at;
+    }
+
     public Complain(long id, String message, int user_id, int publisher_id) {
         this.id = id;
         this.message = message;
