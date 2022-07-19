@@ -66,46 +66,47 @@
                                     <input type="hidden" name="id" value="<c:out value='${currentPub.id}' />" />
                                 </c:if>
                             <div class="form-outline mb-4">
+                                <label>Name for company</label>
                                 <input type="text"
                                        value="<c:out value='${currentPub.nameOfCompany}' />"
                                        name="nameOfCompany" id="form4Example1" class="form-control border"/>
-                                <label class="form-label" for="form4Example1">Name for company</label>
                             </div>
                             <div class="form-outline mb-4">
+                                <label>username</label>
                                 <input type="text"
                                        value="<c:out value='${currentPub.username}' />"
                                        name="username" id="form4Example2" class="form-control border"/>
-                                <label class="form-label" for="form4Example1">username</label>
                             </div>
                             <div class="form-outline mb-4">
+                                <label >Address</label>
                                 <input type="text"
                                        value="<c:out value='${currentPub.address}' />"
                                        name="address" class="form-control border"/>
-                                <label class="form-label">Address</label>
                             </div>
                             <div class="form-outline mb-4">
+                                <label>Phone number</label>
                                 <input type="text"
                                        value="<c:out value='${currentPub.phoneNumber}' />"
                                        name="phoneNumber" class="form-control border"/>
-                                <label class="form-label">Phone number</label>
                             </div>
                             <div class="form-outline mb-4">
+                                <label>Email</label>
                                 <input type="email"
                                        value="<c:out value='${currentPub.email}' />"
                                        name="email" class="form-control border"/>
-                                <label class="form-label">Email</label>
                             </div>
                             <div class="form-outline mb-4">
+                                <label>Password</label>
                                 <input type="password"
                                        value="<c:out value='${currentPub.password}' />"
                                        name="password" class="form-control border"/>
-                                <label class="form-label">Password</label>
                             </div>
                             <!-- Message input -->
                             <div class="form-outline mb-4">
                                 <label class="form-label">Description</label>
                                 <textarea name="textData"
                                           id="editor" style="min-height: 200px">
+                                    <c:out value='${currentPub.description}' />
                                 </textarea>
                             </div>
 
