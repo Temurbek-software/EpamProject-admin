@@ -1,5 +1,6 @@
 <%@ page import="services.CookieService" %>
-<%@ page import="entity.Publisher" %><%--
+<%@ page import="entity.Publisher" %>
+<%@ page import="payload.PublisherDto" %><%--
   Created by IntelliJ IDEA.
   User: Temurbek
   Date: 6/24/2022
@@ -11,6 +12,7 @@
 <%
     CookieService service = new CookieService();
     Publisher publisher = service.getPublisher(request);
+    PublisherDto publisherDto = service.getAdminName(request);
 %>
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
     <!-- Navbar Brand-->
@@ -28,6 +30,26 @@
     </form>
 
     <%
+        if (publisher.getId() == 0) {
+    %>
+    <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="navbarDropdown1"
+               href="#" role="button" data-bs-toggle="dropdown"
+               aria-expanded="false">
+                <%=publisherDto.getUsername()%>
+                <i class="fas fa-user fa-fw"></i></a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown1">
+<%--                <li><a class="dropdown-item" href="userProfile">Settings</a></li>--%>
+<%--                <li><a class="dropdown-item" href="messaging">Message</a></li>--%>
+                <li><hr class="dropdown-divider"/></li>
+                <li><a class="dropdown-item" href="/logout">Logout</a></li>
+            </ul>
+        </li>
+    </ul>
+
+    <%
+    } else {
         if (publisher.isActive()) {
     %>
     <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
@@ -37,8 +59,8 @@
                 <%=publisher.getUsername()%>
                 <i class="fas fa-user fa-fw"></i></a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#!">Settings</a></li>
-                <li><a class="dropdown-item" href="#!">Activity Log</a></li>
+                <li><a class="dropdown-item" href="userProfile">Settings</a></li>
+                <li><a class="dropdown-item" href="messaging">Message</a></li>
                 <li>
                     <hr class="dropdown-divider"/>
                 </li>
@@ -46,11 +68,13 @@
             </ul>
         </li>
     </ul>
+
     <%
+            }
         }
     %>
     <!-- Navbar-->
-<%--    <c:if test="${publisherSession!=null}">--%>
+    <%--    <c:if test="${publisherSession!=null}">--%>
 
-<%--    </c:if>--%>
+    <%--    </c:if>--%>
 </nav>
