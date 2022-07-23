@@ -18,7 +18,10 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-@WebServlet(urlPatterns = {"/loginPage", "/registration", "/login", "/logout"})
+@WebServlet(urlPatterns = {"/loginPage",
+        "/regis",
+        "/registration", "/login",
+        "/logout"})
 public class LoginController extends HttpServlet {
     private UserServices userServices;
     private PublisherService publisherService;
@@ -53,7 +56,7 @@ public class LoginController extends HttpServlet {
                     break;
             }
         } catch (SQLException exception) {
-          throw new ServletException(exception);
+            throw new ServletException(exception);
         }
     }
 
@@ -64,7 +67,7 @@ public class LoginController extends HttpServlet {
     }
 
     private void getRegister(HttpServletRequest request, HttpServletResponse response)
-            throws SQLException, IOException, ServletException {
+            throws SQLException {
         String nameOfCompany = request.getParameter("nameOfCompany");
         String username = request.getParameter("username");
         String address = request.getParameter("address");
@@ -80,42 +83,49 @@ public class LoginController extends HttpServlet {
         publisher.setEmail(email);
         publisher.setPassword(password);
         publisher.setDescription(description);
+        System.out.println(description);
         try {
             if (publisherService.isPublisherExist(publisher) != "SUCCESS") {
                 String nm = publisherService.isPublisherExist(publisher);
                 if (nm.equals("NAME_NOT_VALID")) {
-                    request.setAttribute("msg", "Name has already taken");
+                    request.setAttribute("msg", " Name has already taken");
                 }
                 if (nm.equals("PHONE_NUMBER_NOT_VALID")) {
-                    request.setAttribute("msg", "Phone has already taken");
+                    request.setAttribute("msg", " Phone has already taken");
                 }
                 if (nm.equals("EMAIL_NOT_VALID")) {
-                    request.setAttribute("msg", "Email has already taken");
+                    request.setAttribute("msg", " Email has already taken");
                 }
                 if (nm.equals("USERNAME_NOT_VALID")) {
-                    request.setAttribute("msg", "USername has already taken");
+                    request.setAttribute("msg", " Username has already taken");
                 }
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/registration");
                 dispatcher.forward(request, response);
             } else {
                 int result = publisherService.savePublisher(publisher);
                 if (result == 1) {
-
-                    request.setAttribute("result", true);
-                    RequestDispatcher dispatcher = request.getRequestDispatcher("/");
-                    dispatcher.forward(request, response);
+                    publisherService.saveisActive(publisher);
+                    HttpSession httpSession = request.getSession();
+                    httpSession.setAttribute("publisherSession", publisher);
+                    Cookie cookieUser = new Cookie("Username", username);
+                    Cookie cookiePas = new Cookie("Password", password);
+                    cookieUser.setMaxAge(60 * 60);
+                    cookiePas.setMaxAge(60 * 60);
+                    response.addCookie(cookieUser);
+                    response.addCookie(cookiePas);
+                    httpSession.setAttribute("sessUser", username.trim());
+                    response.sendRedirect("/");
                 } else {
                     request.setAttribute("result", false);
                     RequestDispatcher dispatcher = request.getRequestDispatcher("/");
                     dispatcher.forward(request, response);
                 }
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     private void registration(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         RequestDispatcher dispatcher = request.getRequestDispatcher("register/register.jsp");
@@ -130,11 +140,9 @@ public class LoginController extends HttpServlet {
         PublisherDto publisher = new PublisherDto();
         publisher.setUsername(username);
         publisher.setPassword(password);
-        if (publisherService.validate(publisher)) {
-            Publisher publisher1 = publisherService.getPublisher(publisher);
-            publisherService.saveisActive(publisher1);
+        if (username.equals("admin") && password.equals("1")) {
             HttpSession httpSession = request.getSession();
-            httpSession.setAttribute("publisherSession", publisher1);
+            httpSession.setAttribute("adminSession", publisher);
             Cookie cookieUser = new Cookie("Username", username);
             Cookie cookiePas = new Cookie("Password", password);
             Cookie cookieRem = new Cookie("RememberMe", remember);
@@ -144,19 +152,46 @@ public class LoginController extends HttpServlet {
             response.addCookie(cookieUser);
             response.addCookie(cookiePas);
             response.addCookie(cookieRem);
-
             httpSession.setAttribute("sessUser", username.trim());
             response.sendRedirect("/");
+
         } else {
-            request.setAttribute("falseUser", "Authentication failure");
-            RequestDispatcher dispatcher = request.getRequestDispatcher("loginPage");
-            dispatcher.forward(request, response);
+            if (publisherService.validate(publisher)) {
+                Publisher publisher1 = publisherService.getPublisher(publisher);
+                if (!publisher1.isBlocked()) {
+                    publisherService.saveisActive(publisher1);
+                    HttpSession httpSession = request.getSession();
+                    httpSession.setAttribute("publisherSession", publisher1);
+                    Cookie cookieUser = new Cookie("Username", username);
+                    Cookie cookiePas = new Cookie("Password", password);
+                    Cookie cookieRem = new Cookie("RememberMe", remember);
+                    cookieUser.setMaxAge(60 * 60);
+                    cookiePas.setMaxAge(60 * 60);
+                    cookieRem.setMaxAge(60 * 60);
+                    response.addCookie(cookieUser);
+                    response.addCookie(cookiePas);
+                    response.addCookie(cookieRem);
+                    httpSession.setAttribute("sessUser", username.trim());
+                    response.sendRedirect("/");
+                } else {
+                    request.setAttribute("falseUser", "You are blocked");
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("loginPage");
+                    dispatcher.forward(request, response);
+
+                }
+            } else {
+                request.setAttribute("falseUser", "Authentication failure");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("loginPage");
+                dispatcher.forward(request, response);
+            }
         }
+
     }
+
     private void stopAuthenticate(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
-        CookieService cookieService= new CookieService();
-        Publisher publisher=cookieService.getPublisher(request);
+        CookieService cookieService = new CookieService();
+        Publisher publisher = cookieService.getPublisher(request);
         publisherService.saveNoisActive(publisher);
         Cookie cookieUser = new Cookie("Username", null);
         Cookie cookiePas = new Cookie("Password", null);
