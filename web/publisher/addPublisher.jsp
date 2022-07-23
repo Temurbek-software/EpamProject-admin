@@ -27,7 +27,12 @@
             <div class="container px-4">
                 <div class="row">
                     <div class="col-10 offset-1">
-                        <h1 class="mt-4">Add Publisher</h1>
+                        <c:if test="${currentPub == null}">
+                            <h1 class="mt-4">Add Publisher</h1>
+                        </c:if>
+                        <c:if test="${currentPub != null}">
+                            <h1 class="mt-4">Edit data</h1>
+                        </c:if>
                         <ol class="breadcrumb mb-4">
                             <c:if test="${currentPub != null}">
                                 <li class="breadcrumb-item active">Editig page</li>
@@ -36,12 +41,16 @@
                                 <li class="breadcrumb-item active">Adding page</li>
                             </c:if>
                         </ol>
-<%--                        Erors saving publishers--%>
+                        <%--                        Erors saving publishers--%>
                         <c:if test="${msg!=null}">
                             <div class="alert alert-warning alert-dismissible fade show" role="alert">
                                 <strong>Hey!</strong><c:out value='${msg}'/>
                             </div>
-                        </c:if>
+                        </c:if> <c:if test="${msgUpdatePub!=null}">
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong>Hey!</strong><c:out value='${msgUpdatePub}'/>
+                        </div>
+                    </c:if>
                         <c:if test="${result==false}">
                             <div class="alert alert-warning alert-dismissible fade show" role="alert">
                                 <strong>Hey!</strong> We got Arror in saving
@@ -52,70 +61,70 @@
                         </c:if>
                         <c:if test="${result==true}">
                             <div class="alert alert-success" role="alert">
-                                We made it and  saved data.
+                                We made it and saved data.
                             </div>
                         </c:if>
-                      <c:if test="${currentPub==null}">
+                        <c:if test="${currentPub==null}">
                         <form action="/addPub" method="post">
-                        </c:if>
+                            </c:if>
                             <c:if test="${currentPub!=null}">
                             <form action="/updatePub" method="post">
-                            </c:if>
-                            <!-- Name input -->
-                                <c:if test="${currentPub != null}">
-                                    <input type="hidden" name="id" value="<c:out value='${currentPub.id}' />" />
                                 </c:if>
-                            <div class="form-outline mb-4">
-                                <label>Name for company</label>
-                                <input type="text"
-                                       value="<c:out value='${currentPub.nameOfCompany}' />"
-                                       name="nameOfCompany" id="form4Example1" class="form-control border"/>
-                            </div>
-                            <div class="form-outline mb-4">
-                                <label>username</label>
-                                <input type="text"
-                                       value="<c:out value='${currentPub.username}' />"
-                                       name="username" id="form4Example2" class="form-control border"/>
-                            </div>
-                            <div class="form-outline mb-4">
-                                <label >Address</label>
-                                <input type="text"
-                                       value="<c:out value='${currentPub.address}' />"
-                                       name="address" class="form-control border"/>
-                            </div>
-                            <div class="form-outline mb-4">
-                                <label>Phone number</label>
-                                <input type="text"
-                                       value="<c:out value='${currentPub.phoneNumber}' />"
-                                       name="phoneNumber" class="form-control border"/>
-                            </div>
-                            <div class="form-outline mb-4">
-                                <label>Email</label>
-                                <input type="email"
-                                       value="<c:out value='${currentPub.email}' />"
-                                       name="email" class="form-control border"/>
-                            </div>
-                            <div class="form-outline mb-4">
-                                <label>Password</label>
-                                <input type="password"
-                                       value="<c:out value='${currentPub.password}' />"
-                                       name="password" class="form-control border"/>
-                            </div>
-                            <!-- Message input -->
-                            <div class="form-outline mb-4">
-                                <label class="form-label">Description</label>
-                                <textarea name="textData"
-                                          id="editor" style="min-height: 200px">
-                                    <c:out value='${currentPub.description}' />
+                                <!-- Name input -->
+                                <c:if test="${currentPub != null}">
+                                    <input type="hidden" name="id" value="<c:out value='${currentPub.id}' />"/>
+                                </c:if>
+                                <div class="form-outline mb-4">
+                                    <label>Name for company</label>
+                                    <input type="text"
+                                           value="<c:out value='${currentPub.nameOfCompany}' />"
+                                           name="nameOfCompany" id="form4Example1" class="form-control border"/>
+                                </div>
+                                <div class="form-outline mb-4">
+                                    <label>username</label>
+                                    <input type="text"
+                                           value="<c:out value='${currentPub.username}' />"
+                                           name="username" id="form4Example2" class="form-control border"/>
+                                </div>
+                                <div class="form-outline mb-4">
+                                    <label>Address</label>
+                                    <input type="text"
+                                           value="<c:out value='${currentPub.address}' />"
+                                           name="address" class="form-control border"/>
+                                </div>
+                                <div class="form-outline mb-4">
+                                    <label>Phone number</label>
+                                    <input type="text"
+                                           value="<c:out value='${currentPub.phoneNumber}' />"
+                                           name="phoneNumber" class="form-control border"/>
+                                </div>
+                                <div class="form-outline mb-4">
+                                    <label>Email</label>
+                                    <input type="email"
+                                           value="<c:out value='${currentPub.email}' />"
+                                           name="email" class="form-control border"/>
+                                </div>
+                                <div class="form-outline mb-4">
+                                    <label>Password</label>
+                                    <input type="password"
+                                           value="<c:out value='${currentPub.password}' />"
+                                           name="password" class="form-control border"/>
+                                </div>
+                                <!-- Message input -->
+                                <div class="form-outline mb-4">
+                                    <label class="form-label">Description</label>
+                                    <textarea name="editor"
+                                              id="editor" style="min-height: 200px">
+                                    <c:out value='${currentPub.description}'/>
                                 </textarea>
-                            </div>
+                                </div>
 
-                            <!-- Submit button -->
-                            <div class="mt-2">
-                                <button type="submit" class="btn btn-primary  mb-4">Send</button>
-                                <button type="button" class="btn btn-danger  mb-4">Discard</button>
-                            </div>
-                        </form>
+                                <!-- Submit button -->
+                                <div class="mt-2">
+                                    <button type="submit" class="btn btn-primary  mb-4">Send</button>
+                                    <button type="button" class="btn btn-danger  mb-4">Discard</button>
+                                </div>
+                            </form>
                     </div>
                 </div>
             </div>
