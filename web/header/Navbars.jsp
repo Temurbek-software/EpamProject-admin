@@ -1,4 +1,6 @@
-<%--
+<%@ page import="payload.PublisherDto" %>
+<%@ page import="entity.Publisher" %>
+<%@ page import="services.CookieService" %><%--
   Created by IntelliJ IDEA.
   User: Temurbek
   Date: 6/27/2022
@@ -7,6 +9,17 @@
 --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    CookieService service = new CookieService();
+    String username, password;
+    if (service.getPublisher(request).getId() == 0) {
+        username = service.getAdminName(request).getUsername();
+        password = service.getAdminName(request).getPassword();
+    } else {
+        username = service.getPublisher(request).getUsername();
+        password = service.getPublisher(request).getPassword();
+    }
+%>
 <div id="layoutSidenav_nav">
     <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
         <div class="sb-sidenav-menu">
@@ -18,6 +31,10 @@
                 </a>
                 <div class="sb-sidenav-menu-heading">Interface</div>
                 <%--                    Category--%>
+              <%
+              if (username.equals("admin")&&password.equals("1"))
+              {
+                  %>
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts"
                    aria-expanded="false" aria-controls="collapseLayouts">
                     <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
@@ -32,7 +49,11 @@
                     </nav>
                 </div>
 
-<%--                for post--%>
+                <%
+              }
+              %>
+
+                <%--                for post--%>
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages"
                    aria-expanded="false" aria-controls="collapsePages">
                     <div class="sb-nav-link-icon">
@@ -57,18 +78,28 @@
                            aria-controls="pagesCollapseError">
                             manage news
                         </a>
+                        <%
+                            if (username.equals("admin")&&password.equals("1"))
+                            {
+                        %>
                         <a class="nav-link collapsed" href="deletedNews"
                            data-bs-target="#pagesCollapseError"
                            aria-controls="pagesCollapseError">
                             deleted news
                         </a>
-
+                        <%
+                            }
+                        %>
                     </nav>
 
                 </div>
 
-<%--                for publisher --%>
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePagespublisher"
+                <%
+                    if (username.equals("admin")&&password.equals("1"))
+                    {
+                %>
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                   data-bs-target="#collapsePagespublisher"
                    aria-expanded="false" aria-controls="collapsePagespublisher">
                     <div class="sb-nav-link-icon">
                         <i class="fas fa-book-open"></i>
@@ -80,19 +111,24 @@
                 </a>
                 <div class="collapse" id="collapsePagespublisher" aria-labelledby="headingTwo"
                      data-bs-parent="#sidenavAccordion">
-                    <nav class="sb-sidenav-menu-nested nav accordion" >
+                    <nav class="sb-sidenav-menu-nested nav accordion">
                         <a href="<%=request.getContextPath()%>/displayPublisher" class="nav-link"
                            data-bs-target="#pagesCollapseAuth"
                            aria-controls="pagesCollapseAuth">
-                           Add Publishers
+                            Add Publishers
                         </a>
-                        <a  class="nav-link collapsed" href="/managePublishers"
+                        <a class="nav-link collapsed" href="/managePublishers"
                            data-bs-target="#pagesCollapseError"
                            aria-controls="pagesCollapseError">
                             Manage publisher
                         </a>
                     </nav>
                 </div>
+
+                <%
+                    }
+                %>
+                <%--                for publisher --%>
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts1"
                    aria-expanded="false" aria-controls="collapseLayouts">
                     <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
@@ -106,7 +142,7 @@
                         <a class="nav-link" href="/complainMessage">Complaining message</a>
                     </nav>
                 </div>
-<%--                For users--%>
+                <%--                For users--%>
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts2"
                    aria-expanded="false" aria-controls="collapseLayouts">
                     <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
@@ -118,10 +154,17 @@
                     <nav class="sb-sidenav-menu-nested nav">
                         <a class="nav-link" href="/addUser">Add users</a>
                         <a class="nav-link" href="/userList">Manage users</a>
+                        <%
+                            if (username.equals("admin")&&password.equals("1"))
+                            {
+                        %>
                         <a class="nav-link" href="/deletedUsersList">Deleted users</a>
+                        <%
+                            }
+                        %>
                     </nav>
                 </div>
-<%--                Addional page--%>
+                <%--                Addional page--%>
                 <div class="sb-sidenav-menu-heading">Additional</div>
 
                 <a class="nav-link" href="/users">
