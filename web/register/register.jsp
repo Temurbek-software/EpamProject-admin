@@ -244,12 +244,13 @@
     }
 </style>
 <body>
+<c:if test="${msg!=null}">
+    <div class="alert alert-primary alert-dismissible fade show" role="alert">
+        <strong>Hey! </strong><c:out value='${msg}'/>
+    </div>
+</c:if>
 <div class="wrapper">
-    <c:if test="${msgDelete!=null}">
-        <div class="alert alert-primary alert-dismissible fade show" role="alert">
-            <strong>Hey! </strong><c:out value='${msgDelete}'/>
-        </div>
-    </c:if>
+
     <div class="form-left">
         <h2 class="text-uppercase">information</h2>
         <p>
@@ -263,7 +264,7 @@
             blogs online, the competition is more than fierce.</p>
 
     </div>
-    <form action="" method="post" class="form-right">
+    <form action="regis" method="post" class="form-right">
         <h2 class="text-uppercase">Registration!</h2>
         <input type="hidden" name="description" value=""/>
         <div class="row">
@@ -309,7 +310,9 @@
         <%--            </label>--%>
         <%--        </div>--%>
         <div class="form-field">
-            <input type="submit" value="Register" class="register" name="register">
+            <button type="submit" value="Register" class="register">
+                Send
+            </button>
         </div>
     </form>
 </div>
