@@ -133,12 +133,13 @@
 <div class="container">
 
     <div class="d-flex justify-content-center h-100">
-        <c:if test="${msg!=null}">
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>Hey!  </strong><c:out value='${msg}'/>
-            </div>
-        </c:if>
+
         <div class="card">
+            <c:if test="${msg!=null}">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>Hey!  </strong><c:out value='${msg}'/>
+                </div>
+            </c:if>
             <div class="card-header">
                 <h3>Sign In</h3>
 
