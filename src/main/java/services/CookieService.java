@@ -27,4 +27,20 @@ public class CookieService {
         publisher = publisherService.getPublisher(publisherDto);
         return publisher;
     }
+    public PublisherDto getAdminName(HttpServletRequest request)
+    {
+        PublisherDto publisherDto = new PublisherDto();
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("Username")) {
+                    publisherDto.setUsername(cookie.getValue());
+                }
+                if (cookie.getName().equals("Password")) {
+                    publisherDto.setPassword(cookie.getValue());
+                }
+            }
+        }
+        return publisherDto;
+    }
 }

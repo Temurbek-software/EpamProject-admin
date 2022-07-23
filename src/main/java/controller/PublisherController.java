@@ -1,10 +1,8 @@
 package controller;
 
 import entity.Publisher;
-import services.CategoryServices;
-import services.ProductServices;
-import services.PublisherService;
-import services.UserServices;
+import entity.Users;
+import services.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,15 +13,18 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
-@WebServlet(urlPatterns = {"/managePublishers",
+@WebServlet(urlPatterns = {
+        "/managePublishers",
         "/displayPublisher",
-        "/addPub","/deletePub","/editPub","/updatePub","/blockPublisher"})
+        "/addPub", "/deletePub",
+        "/editPub", "/updatePub",
+        "/blockPublisher", "/messaging"})
 public class PublisherController extends HttpServlet {
     private PublisherService publisherService;
 
-    public void init()
-    {
+    public void init() {
         publisherService = new PublisherService();
     }
 
@@ -52,76 +53,93 @@ public class PublisherController extends HttpServlet {
             case "/deletePub":
                 deletePublisher(request, response);
                 break;
+            case "/messaging":
+                getMsg(request, response);
+                break;
             case "/blockPublisher":
                 blocking(request, response);
                 break;
         }
     }
+
     private void editPublisher(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-            IOException
-    {
+            IOException {
         long id = Integer.parseInt(request.getParameter("id"));
-        Publisher publisher=publisherService.getPublisherById(id);
-        request.setAttribute("currentPub",publisher);
+        Publisher publisher = publisherService.getPublisherById(id);
+        request.setAttribute("currentPub", publisher);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/displayPublisher");
         dispatcher.forward(request, response);
     }
+
+    private void getMsg(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+            IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("chatting/ChatBox.jsp");
+        dispatcher.forward(request, response);
+    }
+
 
     private void blocking(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
         long id = Integer.parseInt(request.getParameter("id"));
         Publisher publisher = publisherService.getPublisherById(id);
-       if (publisher.isBlocked())
-       {
-           publisherService.setFalse(publisher.getId());
-       }
-       else
-       {
-           publisherService.setTrue(publisher.getId());
-       }
+        if (publisher.isBlocked()) {
+            publisherService.setFalse(publisher.getId());
+        } else {
+            publisherService.setTrue(publisher.getId());
+        }
         RequestDispatcher dispatcher = request.getRequestDispatcher("/managePublishers");
         dispatcher.forward(request, response);
     }
+
     private void updatePublisher(HttpServletRequest request, HttpServletResponse response) throws ServletException,
-            IOException
-    {
+            IOException {
         long id = Integer.parseInt(request.getParameter("id"));
-        String nameOfCompany=request.getParameter("nameOfCompany");
-        String username=request.getParameter("username");
-        String address=request.getParameter("address");
-        String phoneNumber=request.getParameter("phoneNumber");
-        String email=request.getParameter("email");
-        String password=request.getParameter("password");
-        String description=request.getParameter("description");
-        Publisher publisher=new Publisher(id,username,nameOfCompany,
-                address,phoneNumber,email,password, description);
-        if (publisherService.updatePublisher(publisher)>0)
-        {
-             request.setAttribute("msgUpdatePublisher","Publisher has been successfully updated");
-            RequestDispatcher dispatcher = request.getRequestDispatcher("publisher/managePublisher.jsp");
-            dispatcher.forward(request, response);
+        String nameOfCompany = request.getParameter("nameOfCompany");
+        String username = request.getParameter("username");
+        String address = request.getParameter("address");
+        String phoneNumber = request.getParameter("phoneNumber");
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        String description = request.getParameter("editor") == null ? "" : request.getParameter("editor");
+        Publisher publisher = new Publisher(id, username, nameOfCompany,
+                address, phoneNumber, email, password, description);
+        CookieService cookieService = new CookieService();
+        Publisher publisher2 = cookieService.getPublisher(request);
+        if (publisher2.getId() == id) {
+            if (publisherService.updatePublisher(publisher) > 0) {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/logout");
+                dispatcher.forward(request, response);
+            } else {
+                request.setAttribute("msgUpdatePub", "In updatingFailed updating please try again or check it out");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("displayPublisher");
+                dispatcher.forward(request, response);
+            }
+        } else {
+            if (publisherService.updatePublisher(publisher) > 0) {
+                request.setAttribute("msgUpdatePublisher", "Publisher has been successfully updated");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("publisher/managePublisher.jsp");
+                dispatcher.forward(request, response);
+            } else {
+                request.setAttribute("msgUpdatePub", "Failed updating please try again or check it out");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("displayPublisher");
+                dispatcher.forward(request, response);
+            }
         }
-        else
-        {
-            request.setAttribute("msgUpdatePub","Failed updating please try again or check it out");
-            RequestDispatcher dispatcher = request.getRequestDispatcher("displayPublisher");
-            dispatcher.forward(request, response);
-        }
+
     }
+
     private void deletePublisher(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
         long id = Integer.parseInt(request.getParameter("id"));
-        if (publisherService.deletePublisher(id))
-        {
-            request.setAttribute("msgPublisher","Post has been deleted successfully");
-        }
-        else
-        {
-            request.setAttribute("msgPublisher1","Sorry, Unfortunately post not deleted, please check again");
+        if (publisherService.deletePublisher(id)) {
+            request.setAttribute("msgPublisher", "Post has been deleted successfully");
+        } else {
+            request.setAttribute("msgPublisher1", "Sorry, Unfortunately post not deleted, please check again");
         }
         RequestDispatcher dispatcher = request.getRequestDispatcher("publisher/managePublisher.jsp");
         dispatcher.forward(request, response);
     }
+
     private void insertPub(HttpServletRequest request, HttpServletResponse response) throws ServletException,
             IOException {
         String nameOfCompany = request.getParameter("nameOfCompany");

@@ -24,7 +24,8 @@ import java.util.List;
         "/createUsers", "/userList",
         "/deleteUsers", "/updateUsers",
         "/deletedUsersList", "/recoverUsers",
-        "/deleteUsersForTime", "/blockUsers","/blockUsersInDeleted"})
+        "/deleteUsersForTime", "/blockUsers",
+        "/blockUsersInDeleted","/userProfile"})
 public class UserController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private UserServices userServices;
@@ -74,6 +75,9 @@ public class UserController extends HttpServlet {
                 case "/blockUsersInDeleted":
                     blockUsersDeleted(request, response);
                     break;
+                case "/userProfile":
+                    getUserProfile(request, response);
+                    break;
             }
         } catch (SQLException ex) {
             throw new ServletException(ex);
@@ -83,6 +87,12 @@ public class UserController extends HttpServlet {
     private void displayUser(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         RequestDispatcher dispatcher = request.getRequestDispatcher("/entityList/ManagaUsers.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void getUserProfile(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, IOException, ServletException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/entityList/UserProfile.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -108,7 +118,9 @@ public class UserController extends HttpServlet {
         }
         RequestDispatcher dispatcher = request.getRequestDispatcher("/entityList/ManagaUsers.jsp");
         dispatcher.forward(request, response);
-    }  private void blockUsersDeleted(HttpServletRequest request, HttpServletResponse response)
+    }
+
+    private void blockUsersDeleted(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
 
         int id = Integer.parseInt(request.getParameter("id"));
