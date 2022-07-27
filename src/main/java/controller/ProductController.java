@@ -5,6 +5,7 @@ import database.DB;
 import entity.Category;
 import entity.Product;
 import entity.Publisher;
+import org.apache.tomcat.util.codec.binary.Base64;
 import payload.ProductDetails;
 import services.*;
 
@@ -24,7 +25,7 @@ import javax.servlet.http.Part;
 
 @WebServlet(urlPatterns = {"/", "/deletedNews",
         "/createNews", "/editNewsForm", "/showNewsForm"
-        ,"/deleteNews","/recover","/deleteNewsTemporary"})
+        ,"/deleteNews","/recover","/deleteNewsTemporary","/updateNews"})
 @MultipartConfig(maxFileSize = 16177215)
 public class ProductController extends HttpServlet {
     private ProductServices productService;
@@ -51,6 +52,9 @@ public class ProductController extends HttpServlet {
             switch (action) {
                 case "/createNews":
                     insertNews(request, response);
+                    break;
+                case "/updateNews":
+                    updateNews(request, response);
                     break;
                 case "/displayNews":
                     displayNews(request, response);
@@ -167,8 +171,10 @@ public class ProductController extends HttpServlet {
         String name = CategoryServices.getCategoryByName(id);
         request.setAttribute("nameof", name);
         Product product = productService.getProductByID(id);
+        String file=new String(Base64.encodeBase64((product.getPhotofile())),"UTF-8");
 
         request.setAttribute("productCurrent", product);
+        request.setAttribute("file",file);
         RequestDispatcher dispatcher = request.getRequestDispatcher("product/AddNews.jsp");
         dispatcher.forward(request, response);
     }
@@ -193,9 +199,59 @@ public class ProductController extends HttpServlet {
         int i = productService.saveProduct(product, id);
         if (i != 0) {
             request.setAttribute("msg", "New post saved successfully");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("displayNews");
+            dispatcher.forward(request, response);
         }
-        RequestDispatcher dispatcher = request.getRequestDispatcher("showNewsForm");
-        dispatcher.forward(request, response);
+        else
+
+        {
+            request.setAttribute("msg","Sorry something wrong");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("showNewsForm");
+            dispatcher.forward(request, response);
+        }
+
+
+    }
+
+    private void updateNews(HttpServletRequest request, HttpServletResponse response)
+            throws SQLException, ServletException, IOException {
+        int id=Integer.parseInt(request.getParameter("id"));
+        System.out.println(id);
+        String titles = request.getParameter("titles");
+        System.out.println(titles);
+        String description = request.getParameter("description");
+        System.out.println(description);
+        String textData = request.getParameter("editor");
+        System.out.println("textdata");
+        String sourcelinkTo = request.getParameter("sourcelinkTo");
+        System.out.println(sourcelinkTo);
+        Part filePart = request.getPart("photofile");
+        System.out.println("photo file");
+        String categoryName = request.getParameter("name1");
+        Product product = new Product();
+        product.setId(id);
+        product.setTitles(titles);
+        product.setDescription(description);
+        product.setTextData(textData);
+        product.setSourcelinkTo(sourcelinkTo);
+        product.setPhotofile(filePart.getInputStream().readAllBytes());
+        product.setCategory_id(Integer.parseInt(categoryName));
+        System.out.println(Integer.parseInt(categoryName));
+        CookieService cookieService = new CookieService();
+        long pubid = cookieService.getPublisher(request).getId();
+        int i = productService.updatePost(product, id,pubid);
+        if (i != 0) {
+            request.setAttribute("msg", "Current post updated successfully");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("displayNews");
+            dispatcher.forward(request, response);
+        }
+        else
+        {
+            request.setAttribute("msg","Sorry something wrong");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("showNewsForm");
+            dispatcher.forward(request, response);
+        }
+
 
     }
 
