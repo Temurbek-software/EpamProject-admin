@@ -38,7 +38,7 @@
                             <li class="breadcrumb-item active">Home</li>
                         </ol>
                         <c:if test="${productCurrent != null}">
-                        <form action="/editNewsForm" method="post" enctype="multipart/form-data">
+                        <form action="/updateNews" method="post" enctype="multipart/form-data">
                             </c:if>
                             <c:if test="${productCurrent == null}">
                             <form action="/createNews" method="post" enctype="multipart/form-data">
@@ -47,26 +47,39 @@
                                 <input type="hidden" name="id" value="<c:out value='${productCurrent.id}' />"/>
                                 <div class="form-outline mb-4">
                                     <label>Post title</label>
-                                    <input type="text" value="<c:out value='${productCurrent.titles}' />" name="titles"
+                                    <input type="text" value="<c:out value='${productCurrent.titles}' />"
+                                           name="titles"
                                            id="form4Example1" class="form-control border"/>
                                 </div>
                                 <div class="form-outline mb-4">
-                                    <label >Post description</label>
+                                    <label>Post description</label>
                                     <input type="text" value="<c:out value='${productCurrent.description}'/>"
                                            name="description" class="form-control border"/>
                                 </div>
                                 <select name="name1" class="form-select mb-4" aria-label="Default select example">
-                                    <c:if test="${productCurrent!=null}">
-                                        <option value="<c:out value='${productCurrent.category_id}'/>"
-                                                selected>
-                                            <c:out value='${nameof}'/>
-                                        </option>
-                                        <c:forEach var="categ" items="${categoryList}">
-                                            <option value="<c:out value='${categ.id}' />"><c:out
-                                                    value="${categ.name}"/>
+                                    <c:choose>
+                                        <c:when test="${productCurrent!=null}">
+                                            <option value="<c:out value='${productCurrent.category_id}'/>"
+                                                    selected>
+                                                <c:out value='${nameof}'/>
                                             </option>
-                                        </c:forEach>
-                                    </c:if>
+                                            <c:forEach var="categ" items="${categoryList}">
+                                                <option value="<c:out value='${categ.id}' />"><c:out
+                                                        value="${categ.name}"/>
+                                                </option>
+                                            </c:forEach>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <option selected>Choose category</option>
+
+                                            <c:forEach var="categ" items="${categoryList}">
+                                                <option value="<c:out value='${categ.id}' />"><c:out
+                                                        value="${categ.name}"/>
+                                                </option>
+                                            </c:forEach>
+                                        </c:otherwise>
+                                    </c:choose>
+
                                 </select>
                                 <!-- Message input -->
                                 <div class="form-outline mb-4">
@@ -76,14 +89,15 @@
                                     </textarea>
                                 </div>
                                 <div class="form-outline mb-4">
-                                    <label >Link for post</label>
+                                    <label>Link for post</label>
                                     <input type="url" value="<c:out value='${productCurrent.sourcelinkTo}'/>"
                                            name="sourcelinkTo" class="form-control border"/>
                                 </div>
-                                <label for="customFile" class="form-label">Upload multiple files</label>
-                                <input class="form-control" value="<c:out value='${productCurrent.photofile}'/>"
-                                       name="photofile" type="file" id="customFile" multiple/>
+                                <label for="customFile" class="form-label">Upload a file</label>
+                                <input class="form-control" value="<c:out value='${file}'/>"
+                                       name="photofile" type="file" id="customFile"/>
                                 <!-- Submit button -->
+<%--                                <c:out value='${file}'/>--%>
                                 <div class="mt-2">
                                     <button type="submit" class="btn btn-primary  mb-4">Send</button>
                                     <button type="button" class="btn btn-danger  mb-4">Discard</button>
