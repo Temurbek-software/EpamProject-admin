@@ -4,7 +4,7 @@ package entity;
 import java.util.Date;
 
 public class Product {
-    private Long id;
+    private long id;
     private String titles;
     private String textData;
     private String description;
@@ -19,7 +19,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(Long id, String titles, String textData, String description, String sourcelinkTo, byte[] photofile, Date created_at, Date updated_at, int counterOfView, int category_id, int publisher_id, boolean isDeleted) {
+    public Product(long id, String titles, String textData, String description, String sourcelinkTo, byte[] photofile, Date created_at, Date updated_at, int counterOfView, int category_id, int publisher_id, boolean isDeleted) {
         this.id = id;
         this.titles = titles;
         this.textData = textData;
@@ -42,7 +42,7 @@ public class Product {
         isDeleted = deleted;
     }
 
-    public Product(Long id, String titles,
+    public Product(long id, String titles,
                    String description,
                    String sourcelinkTo,
                    byte[] photofile,
@@ -56,7 +56,7 @@ public class Product {
         this.updated_at = updated_at;
     }
 
-    public Product(Long id, String titles,
+    public Product(long id, String titles,
                    String textData,
                    String description,
                    String sourcelinkTo,
@@ -74,7 +74,7 @@ public class Product {
         this.updated_at = updated_at;
     }
 
-    public Product(Long id, String titles, String textData, String description, String sourcelinkTo, byte[] photofile, Date created_at, Date updated_at, boolean isDeleted) {
+    public Product(long id, String titles, String textData, String description, String sourcelinkTo, byte[] photofile, Date created_at, Date updated_at, boolean isDeleted) {
         this.id = id;
         this.titles = titles;
         this.textData = textData;
@@ -121,11 +121,11 @@ public class Product {
         this.category_id = category_id;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
