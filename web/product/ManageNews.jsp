@@ -9,7 +9,8 @@
 <%@ page import="database.DB" %>
 <%@ page import="java.sql.Connection" %>
 <%@ page import="java.sql.PreparedStatement" %>
-<%@ page import="java.sql.ResultSet" %><%--
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="services.CookieService" %><%--
   Created by IntelliJ IDEA.
   User: Temurbek
   Date: 6/24/2022
@@ -23,6 +24,10 @@
 <head>
     <title>Post list</title>
     <jsp:include page="../header/head.jsp"></jsp:include>
+    <%
+        CookieService cookieService= new CookieService();
+        Publisher publisher=cookieService.getPublisher(request);
+    %>
 </head>
 <body class="sb-nav-fixed">
 <jsp:include page="../header/header.jsp"></jsp:include>
@@ -36,7 +41,7 @@
                 </div>
             </c:if>
             <div class="container-fluid px-4">
-                <h1 class="mt-4">Dashboard</h1>
+                <h1 class="mt-4">List of News</h1>
                 <ol class="breadcrumb mb-4">
                     <li class="breadcrumb-item active">Dashboard</li>
                 </ol>
@@ -58,9 +63,12 @@
                                 ProductServices productServices = new ProductServices();
                                 try {
                                     Connection connection = DB.getConnection();
-                                    PreparedStatement preparedStatement = connection.prepareStatement("SELECT product.id, titles,category.name, " +
-                                            "category_id, publisher_id,  \"counterOfView\", \"isDeleted\"\n" +
-                                            "\tFROM public.product inner join category on product.category_id=category.id where \"isDeleted\"=false");
+                                    PreparedStatement preparedStatement = connection
+                                            .prepareStatement("SELECT product.id, titles,category.name, category_id,\n" +
+                                                    "publisher_id, \"counterOfView\", \n" +
+                                                    "\"isDeleted\" FROM public.product \n" +
+                                                    "inner join category on product.category_id=category.id where" +
+                                                    " \"isDeleted\"=false and publisher_id="+publisher.getId()+"");
                                     ResultSet rs = preparedStatement.executeQuery();
                                     while (rs.next()) {
                             %>
