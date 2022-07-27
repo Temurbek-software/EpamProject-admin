@@ -167,10 +167,10 @@
                 <%--                Addional page--%>
                 <div class="sb-sidenav-menu-heading">Additional</div>
 
-                <a class="nav-link" href="/users">
-                    <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                    Users
-                </a>
+<%--                <a class="nav-link" href="/">--%>
+<%--                    <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>--%>
+<%--                    Users--%>
+<%--                </a>--%>
             </div>
         </div>
         <div class="sb-sidenav-footer">
