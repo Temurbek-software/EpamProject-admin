@@ -9,212 +9,320 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
-    <title>Add new user</title>
+    <title>Chat</title>
     <jsp:include page="../header/head.jsp"></jsp:include>
-
 </head>
+<script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+<style>
+    .inbox_people {
+        background: #fff;
+        float: left;
+        overflow: hidden;
+        width: 30%;
+        border-right: 1px solid #ddd;
+    }
+
+    .inbox_msg {
+        border: 1px solid #ddd;
+        clear: both;
+        overflow: hidden;
+    }
+
+    .top_spac {
+        margin: 20px 0 0;
+    }
+
+    .recent_heading {
+        float: left;
+        width: 40%;
+    }
+
+    .srch_bar {
+        display: inline-block;
+        text-align: right;
+        width: 60%;
+        padding:2px;
+
+    }
+
+    .headind_srch {
+        padding: 10px 29px 10px 20px;
+        overflow: hidden;
+        border-bottom: 1px solid #c4c4c4;
+    }
+
+    .recent_heading h4 {
+        color: #0465ac;
+        font-size: 16px;
+        margin: auto;
+        line-height: 29px;
+    }
+
+    .srch_bar input {
+        outline: none;
+        border: 1px solid #cdcdcd;
+        border-width: 0 0 1px 0;
+        width: 80%;
+        padding: 2px 0 4px 6px;
+        background: none;
+    }
+
+    .srch_bar .input-group-addon button {
+        background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+        border: medium none;
+        padding: 0;
+        color: #707070;
+        font-size: 18px;
+    }
+
+    .srch_bar .input-group-addon {
+        margin: 0 0 0 -27px;
+    }
+
+    .chat_ib h5 {
+        font-size: 15px;
+        color: #464646;
+        margin: 0 0 8px 0;
+    }
+
+    .chat_ib h5 span {
+        font-size: 13px;
+        float: right;
+    }
+
+    .chat_ib p {
+        font-size: 12px;
+        color: #989898;
+        margin: auto;
+        display: inline-block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .chat_img {
+        float: left;
+        width: 11%;
+    }
+
+    .chat_img img {
+        width: 100%
+    }
+
+    .chat_ib {
+        float: left;
+        padding: 0 0 0 15px;
+        width: 88%;
+    }
+
+    .chat_people {
+        overflow: hidden;
+        clear: both;
+    }
+
+    .chat_list {
+        border-bottom: 1px solid #ddd;
+        margin: 0;
+        padding: 18px 16px 10px;
+    }
+
+    .inbox_chat {
+        height: 550px;
+        overflow-y: scroll;
+    }
+
+    .active_chat {
+        background: #e8f6ff;
+    }
+
+    .incoming_msg_img {
+        display: inline-block;
+        width: 6%;
+    }
+
+    .incoming_msg_img img {
+        width: 100%;
+    }
+
+    .received_msg {
+        display: inline-block;
+        padding: 0 0 0 10px;
+        vertical-align: top;
+        width: 92%;
+    }
+
+    .received_withd_msg p {
+        background: #ebebeb none repeat scroll 0 0;
+        border-radius: 0 15px 15px 15px;
+        color: #646464;
+        font-size: 14px;
+        margin: 0;
+        padding: 5px 10px 5px 12px;
+        width: 100%;
+    }
+
+    .time_date {
+        color: #747474;
+        display: block;
+        font-size: 12px;
+        margin: 8px 0 0;
+    }
+
+    .received_withd_msg {
+        width: 57%;
+    }
+
+    .mesgs {
+        float: left;
+        padding: 30px 15px 0 25px;
+        width: 70%;
+    }
+
+    .sent_msg p {
+        background: #0465ac;
+        border-radius: 12px 15px 15px 0;
+        font-size: 14px;
+        margin: 0;
+        color: #fff;
+        padding: 5px 10px 5px 12px;
+        width: 100%;
+    }
+
+    .outgoing_msg {
+        overflow: hidden;
+        margin: 26px 0 26px;
+    }
+
+    .sent_msg {
+        float: right;
+        width: 46%;
+    }
+
+    .input_msg_write input {
+        background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+        border: medium none;
+        color: #4c4c4c;
+        font-size: 15px;
+        min-height: 48px;
+        width: 100%;
+        outline: none;
+    }
+
+    .type_msg {
+        border-top: 1px solid #c4c4c4;
+        position: relative;
+    }
+
+    .msg_send_btn {
+        background: #05728f none repeat scroll 0 0;
+        border: none;
+        border-radius: 50%;
+        color: #fff;
+        cursor: pointer;
+        font-size: 15px;
+        height: 33px;
+        position: absolute;
+        right: 0;
+        top: 11px;
+        width: 33px;
+    }
+
+    .messaging {
+        padding: 0 0 50px 0;
+    }
+
+    .msg_history {
+        height: 516px;
+        overflow-y: auto;
+    }
+</style>
 <body class="sb-nav-fixed">
 <jsp:include page="../header/header.jsp"></jsp:include>
 <div id="layoutSidenav">
     <jsp:include page="../header/Navbars.jsp"></jsp:include>
-        <div id="layoutSidenav_content">
-            <main>
-                <section style="background-color: #eee;">
-                    <div class="container py-5">
-
-                        <div class="row">
-
-                            <div class="col-md-6 col-lg-5 col-xl-4 mb-4 mb-md-0">
-
-                                <h5 class="font-weight-bold mb-3 text-center text-lg-start">Member</h5>
-
-                                <div class="card">
-                                    <div class="card-body">
-
-                                        <ul class="list-unstyled mb-0">
-                                            <li class="p-2 border-bottom" style="background-color: #eee;">
-                                                <a href="#!" class="d-flex justify-content-between">
-                                                    <div class="d-flex flex-row">
-                                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-8.webp" alt="avatar"
-                                                             class="rounded-circle d-flex align-self-center me-3 shadow-1-strong" width="60">
-                                                        <div class="pt-1">
-                                                            <p class="fw-bold mb-0">John Doe</p>
-                                                            <p class="small text-muted">Hello, Are you there?</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="pt-1">
-                                                        <p class="small text-muted mb-1">Just now</p>
-                                                        <span class="badge bg-danger float-end">1</span>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li class="p-2 border-bottom">
-                                                <a href="#!" class="d-flex justify-content-between">
-                                                    <div class="d-flex flex-row">
-                                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-1.webp" alt="avatar"
-                                                             class="rounded-circle d-flex align-self-center me-3 shadow-1-strong" width="60">
-                                                        <div class="pt-1">
-                                                            <p class="fw-bold mb-0">Danny Smith</p>
-                                                            <p class="small text-muted">Lorem ipsum dolor sit.</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="pt-1">
-                                                        <p class="small text-muted mb-1">5 mins ago</p>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li class="p-2 border-bottom">
-                                                <a href="#!" class="d-flex justify-content-between">
-                                                    <div class="d-flex flex-row">
-                                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-2.webp" alt="avatar"
-                                                             class="rounded-circle d-flex align-self-center me-3 shadow-1-strong" width="60">
-                                                        <div class="pt-1">
-                                                            <p class="fw-bold mb-0">Alex Steward</p>
-                                                            <p class="small text-muted">Lorem ipsum dolor sit.</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="pt-1">
-                                                        <p class="small text-muted mb-1">Yesterday</p>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li class="p-2 border-bottom">
-                                                <a href="#!" class="d-flex justify-content-between">
-                                                    <div class="d-flex flex-row">
-                                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-3.webp" alt="avatar"
-                                                             class="rounded-circle d-flex align-self-center me-3 shadow-1-strong" width="60">
-                                                        <div class="pt-1">
-                                                            <p class="fw-bold mb-0">Ashley Olsen</p>
-                                                            <p class="small text-muted">Lorem ipsum dolor sit.</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="pt-1">
-                                                        <p class="small text-muted mb-1">Yesterday</p>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li class="p-2 border-bottom">
-                                                <a href="#!" class="d-flex justify-content-between">
-                                                    <div class="d-flex flex-row">
-                                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-4.webp" alt="avatar"
-                                                             class="rounded-circle d-flex align-self-center me-3 shadow-1-strong" width="60">
-                                                        <div class="pt-1">
-                                                            <p class="fw-bold mb-0">Kate Moss</p>
-                                                            <p class="small text-muted">Lorem ipsum dolor sit.</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="pt-1">
-                                                        <p class="small text-muted mb-1">Yesterday</p>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li class="p-2 border-bottom">
-                                                <a href="#!" class="d-flex justify-content-between">
-                                                    <div class="d-flex flex-row">
-                                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar"
-                                                             class="rounded-circle d-flex align-self-center me-3 shadow-1-strong" width="60">
-                                                        <div class="pt-1">
-                                                            <p class="fw-bold mb-0">Lara Croft</p>
-                                                            <p class="small text-muted">Lorem ipsum dolor sit.</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="pt-1">
-                                                        <p class="small text-muted mb-1">Yesterday</p>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li class="p-2">
-                                                <a href="#!" class="d-flex justify-content-between">
-                                                    <div class="d-flex flex-row">
-                                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar"
-                                                             class="rounded-circle d-flex align-self-center me-3 shadow-1-strong" width="60">
-                                                        <div class="pt-1">
-                                                            <p class="fw-bold mb-0">Brad Pitt</p>
-                                                            <p class="small text-muted">Lorem ipsum dolor sit.</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="pt-1">
-                                                        <p class="small text-muted mb-1">5 mins ago</p>
-                                                        <span class="text-muted float-end"><i class="fas fa-check" aria-hidden="true"></i></span>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                        </ul>
-
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <center>
+                    <h1 class="center mt-4">Chatting</h1>
+                </center>
+                <div class="messaging">
+                    <div class="inbox_msg">
+                        <div class="inbox_people">
+                            <div class="headind_srch">
+                                <div class="recent_heading">
+                                    <h4>Recent</h4>
+                                </div>
+                                <div class="srch_bar">
+                                    <div class="stylish-input-group">
+                                        <input type="text" class="search-bar" placeholder="Search">
                                     </div>
                                 </div>
-
                             </div>
-
-                            <div class="col-md-6 col-lg-7 col-xl-8">
-
-                                <ul class="list-unstyled">
-                                    <li class="d-flex justify-content-between mb-4">
-                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar"
-                                             class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">
-                                        <div class="card">
-                                            <div class="card-header d-flex justify-content-between p-3">
-                                                <p class="fw-bold mb-0">Brad Pitt</p>
-                                                <p class="text-muted small mb-0"><i class="far fa-clock"></i> 12 mins ago</p>
-                                            </div>
-                                            <div class="card-body">
-                                                <p class="mb-0">
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                                                    labore et dolore magna aliqua.
-                                                </p>
-                                            </div>
+                            <div class="inbox_chat scroll">
+                                <div class="chat_list active_chat">
+                                    <div class="chat_people">
+                                        <div class="chat_img"><img
+                                                src="https://ptetutorials.com/images/user-profile.png" alt="sunil">
                                         </div>
-                                    </li>
-                                    <li class="d-flex justify-content-between mb-4">
-                                        <div class="card w-100">
-                                            <div class="card-header d-flex justify-content-between p-3">
-                                                <p class="fw-bold mb-0">Lara Croft</p>
-                                                <p class="text-muted small mb-0"><i class="far fa-clock"></i> 13 mins ago</p>
-                                            </div>
-                                            <div class="card-body">
-                                                <p class="mb-0">
-                                                    Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
-                                                    laudantium.
-                                                </p>
-                                            </div>
+                                        <div class="chat_ib">
+                                            <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
+                                            <p>Test, which is a new approach to have all solutions
+                                                astrology under one roof.</p>
                                         </div>
-                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar"
-                                             class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="60">
-                                    </li>
-                                    <li class="d-flex justify-content-between mb-4">
-                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar"
-                                             class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">
-                                        <div class="card">
-                                            <div class="card-header d-flex justify-content-between p-3">
-                                                <p class="fw-bold mb-0">Brad Pitt</p>
-                                                <p class="text-muted small mb-0"><i class="far fa-clock"></i> 10 mins ago</p>
-                                            </div>
-                                            <div class="card-body">
-                                                <p class="mb-0">
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                                                    labore et dolore magna aliqua.
-                                                </p>
-                                            </div>
+                                    </div>
+                                </div>
+                                <div class="chat_list">
+                                    <div class="chat_people">
+                                        <div class="chat_img"><img
+                                                src="https://ptetutorials.com/images/user-profile.png" alt="sunil">
                                         </div>
-                                    </li>
-                                    <li class="bg-white mb-3">
-                                        <div class="form-outline">
-                                            <textarea class="form-control" id="textAreaExample2" rows="4"></textarea>
-                                            <label class="form-label" for="textAreaExample2">Message</label>
+                                        <div class="chat_ib">
+                                            <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
+                                            <p>Test, which is a new approach to have all solutions
+                                                astrology under one roof.</p>
                                         </div>
-                                    </li>
-                                    <button type="button" class="btn btn-info btn-rounded float-end">Send</button>
-                                </ul>
-
+                                    </div>
+                                </div>
                             </div>
-
                         </div>
-
+                        <div class="mesgs">
+                            <div class="msg_history">
+                                <div class="incoming_msg">
+                                    <div class="incoming_msg_img"><img
+                                            src="https://ptetutorials.com/images/user-profile.png" alt="sunil"></div>
+                                    <div class="received_msg">
+                                        <div class="received_withd_msg">
+                                            <p>Test which is a new approach to have all
+                                                solutions</p>
+                                            <span class="time_date"> 11:01 AM    |    June 9</span></div>
+                                    </div>
+                                </div>
+                                <div class="outgoing_msg">
+                                    <div class="sent_msg">
+                                        <p>Test which is a new approach to have all
+                                            solutions</p>
+                                        <span class="time_date"> 11:01 AM    |    June 9</span></div>
+                                </div>
+                            </div>
+                            <div class="type_msg">
+                                <div class="input_msg_write">
+                                    <input type="text" name="msgResponse" class="write_msg" placeholder="Type a message"/>
+                                    <button class="msg_send_btn" type="button">
+                                        <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </section>
-            </main>
-            <jsp:include page="../footer/footer.jsp"></jsp:include>
-        </div>
+                </div>
+
+
+            </div>
+
+        </main>
+        <jsp:include page="../footer/footer.jsp"></jsp:include>
+    </div>
 </div>
 <jsp:include page="../footer/extraLink.jsp"></jsp:include>
 
