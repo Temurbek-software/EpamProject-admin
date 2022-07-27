@@ -21,8 +21,8 @@ import java.util.List;
 public class ProductServices {
     private static final String GET_ALL_PRODUCTS = "SELECT id, titles, textdata, description, sourcelinkto, photofile, created_at, updated_at, category_id, publisher_id, \"counterOfView\", \"isDeleted\"\n" +
             "\tFROM public.product;";
-    private static final String GET_PRODUCT_BY_ID = "SELECT " +
-            "titles, textdata, description, sourcelinkto, photofile, category_id\n" +
+    private static final String GET_PRODUCT_BY_ID = "SELECT id, titles," +
+            " textdata, description, sourcelinkto, photofile, created_at, updated_at, category_id, publisher_id, \"counterOfView\", \"isDeleted\"\n" +
             "\tFROM public.product where id=?";
     private static final String GET_PRODUCT_LATEST_ONE = "SELECT id, titles, description, \"sourcelinkTo\", \"createdTime\", photofile, category_id\n" +
             "\tFROM public.product where \"createdTime\"=(select max(\"createdTime\") from product)";
@@ -122,20 +122,24 @@ public class ProductServices {
         return productList;
     }
 
-    public int updatePost(Product product) {
+    public int updatePost(Product product,long id,long pubId) {
         int resul = 0;
         try {
-            PreparedStatement preparedStatement = getstatement(
+            Connection connection = DB.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(
                     "UPDATE public.product\n" +
-                            "\tSET  titles=" + product.getTitles() + ", " +
-                            "textdata=" + product.getTextData() + ", " +
-                            "description=" + product.getDescription() + "," +
-                            " sourcelinkto=" + product.getSourcelinkTo() + ", " +
-                            "photofile=" + product.getPhotofile() + "," +
-                            " category_id=" + product.getCategory_id() + "\n" +
-                            "\tWHERE id=" + product.getId() + ""
+                            "\tSET titles='"+product.getTitles()+"', " +
+                            "textdata='"+product.getTextData()+"'," +
+                            " description='"+product.getDescription()+"'," +
+                            " sourcelinkto='"+product.getSourcelinkTo()+"', \n" +
+                            "\tphotofile='"+product.getPhotofile()+"'," +
+                            " category_id="+product.getCategory_id()+", \n" +
+                            "\tpublisher_id="+pubId+" \n" +
+                            "\tWHERE id="+id+";"
             );
             resul = preparedStatement.executeUpdate();
+            System.out.println(resul);
+            preparedStatement.close();
         } catch (SQLException exception) {
             DB.printSQLException(exception);
         }
@@ -146,7 +150,8 @@ public class ProductServices {
         int num = 0;
         System.out.println("SAve product");
         try {
-            PreparedStatement preparedStatement = getstatement(SAVE_PRODUCT);
+            Connection connection = DB.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SAVE_PRODUCT);
             preparedStatement.setString(1, product.getTitles());
             preparedStatement.setString(2, product.getTextData());
             preparedStatement.setString(3, product.getDescription());
@@ -178,6 +183,7 @@ public class ProductServices {
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
+                product.setId(resultSet.getLong("id"));
                 product.setTitles(resultSet.getString("titles"));
                 product.setTextData(resultSet.getString("textData"));
                 product.setDescription(resultSet.getString("description"));
