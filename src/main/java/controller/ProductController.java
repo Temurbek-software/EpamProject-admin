@@ -216,17 +216,11 @@ public class ProductController extends HttpServlet {
     private void updateNews(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, ServletException, IOException {
         int id=Integer.parseInt(request.getParameter("id"));
-        System.out.println(id);
         String titles = request.getParameter("titles");
-        System.out.println(titles);
         String description = request.getParameter("description");
-        System.out.println(description);
         String textData = request.getParameter("editor");
-        System.out.println("textdata");
         String sourcelinkTo = request.getParameter("sourcelinkTo");
-        System.out.println(sourcelinkTo);
         Part filePart = request.getPart("photofile");
-        System.out.println("photo file");
         String categoryName = request.getParameter("name1");
         Product product = new Product();
         product.setId(id);
@@ -236,7 +230,6 @@ public class ProductController extends HttpServlet {
         product.setSourcelinkTo(sourcelinkTo);
         product.setPhotofile(filePart.getInputStream().readAllBytes());
         product.setCategory_id(Integer.parseInt(categoryName));
-        System.out.println(Integer.parseInt(categoryName));
         CookieService cookieService = new CookieService();
         long pubid = cookieService.getPublisher(request).getId();
         int i = productService.updatePost(product, id,pubid);
