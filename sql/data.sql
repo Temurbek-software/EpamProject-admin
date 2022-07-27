@@ -22,6 +22,29 @@ CREATE TABLE public.product
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     category_id integer
 )
+CREATE TABLE public."PublisherChat"
+(
+    id uuid NOT NULL,
+    "msgText" text NOT NULL,
+    "postDate" timestamp with time zone NOT NULL,
+    publisher_id integer NOT NULL,
+    user_id integer NOT NULL,
+    PRIMARY KEY (id)
+);
+
+ALTER TABLE public."PublisherChat"
+    OWNER to postgres;
+CREATE TABLE public."UserChat"
+(
+    id uuid,
+    "msgText" text,
+    "postDate" timestamp with time zone,
+    publisher_id integer,
+    user_id integer
+);
+
+ALTER TABLE public."UserChat"
+    OWNER to postgres;
 
 CREATE OR REPLACE FUNCTION trigger_set_timestamp()
 RETURNS TRIGGER AS $$
