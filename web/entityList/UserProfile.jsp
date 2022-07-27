@@ -107,8 +107,8 @@
                                             <h4>John Doe</h4>
                                             <p class="text-secondary mb-1"><%=user.getNameOfCompany()%></p>
                                             <p class="text-muted font-size-sm"><%=user.getAddress()%></p>
-                                            <button class="btn btn-primary">Follow</button>
-                                            <button class="btn btn-outline-primary">Message</button>
+<%--                                            <button class="btn btn-primary">Follow</button>--%>
+<%--                                            <button class="btn btn-outline-primary">Message</button>--%>
                                         </div>
                                     </div>
                                 </div>
