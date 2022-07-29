@@ -3,7 +3,8 @@
 <%@ page import="entity.Users" %>
 <%@ page import="entity.Publisher" %>
 <%@ page import="services.PublisherService" %>
-<%@ page import="java.util.stream.Collectors" %><%--
+<%@ page import="java.util.stream.Collectors" %>
+<%@ page import="services.CookieService" %><%--
   Created by IntelliJ IDEA.
   User: Temurbek
   Date: 6/24/2022
@@ -17,6 +18,18 @@
 <head>
     <title>Users list</title>
     <jsp:include page="../header/head.jsp"></jsp:include>
+
+    <%
+        CookieService service = new CookieService();
+        String username, password;
+        if (service.getPublisher(request).getId() == 0) {
+            username = service.getAdminName(request).getUsername();
+            password = service.getAdminName(request).getPassword();
+        } else {
+            username = service.getPublisher(request).getUsername();
+            password = service.getPublisher(request).getPassword();
+        }
+    %>
 </head>
 <body class="sb-nav-fixed">
 <jsp:include page="../header/header.jsp"></jsp:include>
@@ -31,20 +44,20 @@
                 </div>
             </c:if>
             <c:if test="${msgRecoveredUser!=null}">
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>Hey! </strong><c:out value='${msgRecoveredUser}'/>
-            </div>
-        </c:if>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>Hey! </strong><c:out value='${msgRecoveredUser}'/>
+                </div>
+            </c:if>
             <c:if test="${msgDeleteUser!=null}">
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>Hey! </strong><c:out value='${msgDeleteUser}'/>
-            </div>
-        </c:if>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>Hey! </strong><c:out value='${msgDeleteUser}'/>
+                </div>
+            </c:if>
             <c:if test="${msgDelete!=null}">
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>Hey! </strong><c:out value='${msgDelete}'/>
-            </div>
-        </c:if>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>Hey! </strong><c:out value='${msgDelete}'/>
+                </div>
+            </c:if>
 
             <div class="container-fluid px-4">
                 <h1 class="mt-4">Available users</h1>
@@ -56,10 +69,10 @@
 
                         <i class="fas fa-table me-1"></i>
                         Users table
-<%--                        <button style="float: right" type="button"--%>
-<%--                                class="btn btn-success mx-auto">--%>
-<%--                            Add New User--%>
-<%--                        </button>--%>
+                        <%--                        <button style="float: right" type="button"--%>
+                        <%--                                class="btn btn-success mx-auto">--%>
+                        <%--                            Add New User--%>
+                        <%--                        </button>--%>
                     </div>
 
                     <div class="card-body">
@@ -67,7 +80,14 @@
                             <thead class="bg-light">
                             <tr>
                                 <th>username</th>
+                                <%
+                                    if (username.equals("admin") && password.equals("1")) {
+                                %>
                                 <th>password</th>
+
+                                <%
+                                    }
+                                %>
                                 <th>phoneNumber</th>
                                 <th>email</th>
                                 <th>isActive</th>
@@ -80,8 +100,8 @@
                             <tbody>
                             <%
                                 UserServices userServices = new UserServices();
-                                List<Users> usersList=userServices.getAllUser()
-                                        .stream().filter(s->s.isDeleted()==false)
+                                List<Users> usersList = userServices.getAllUser()
+                                        .stream().filter(s -> s.isDeleted() == false)
                                         .collect(Collectors.toList());
                                 for (Users users : usersList) {
                             %>
@@ -95,10 +115,17 @@
                                         </div>
                                     </div>
                                 </td>
+                                    <%
+                    if (username.equals("admin")&&password.equals("1"))
+                    {
+                %>
                                 <td>
                                     <p class="fw-normal mb-1"><%=users.getPassword()%>
                                     </p>
                                 </td>
+                                    <%
+                    }
+                %>
                                 <td>
                                     <p class="fw-normal mb-1"><%=users.getPhoneNumber()%>
                                     </p>
